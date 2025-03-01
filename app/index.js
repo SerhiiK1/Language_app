@@ -14,6 +14,7 @@ const App = () => {
             <Stack.Screen name="SignInPage" component={SignInPage} />
             <Stack.Screen name="HomePage" component={HomePage} />
             <Stack.Screen name="AccountPage" component={AccountPage}/>
+            <Stack.Screen name="Leaderboard" component={Leaderboard}/>
           </Stack.Navigator>
         
     );
@@ -144,6 +145,7 @@ const HomePage = ({ navigation, route }) => {
                     justifyContent: 'center',
                     margin: 20, 
                     alignSelf: 'flex-end',
+                    borderRadius: 10,
                 }}
                 onPress={() => {
                     navigation.navigate('AccountPage');
@@ -153,6 +155,30 @@ const HomePage = ({ navigation, route }) => {
             </TouchableOpacity>
 
             <Text style={{color: 'black', fontSize: 20, textAlign: 'center', justifyContent: 'center'}}>No flash cards here yet :(</Text>
+
+            <View style={{flexDirection: 'row', padding: 10}}>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('HomePage');
+                }}>     
+                <Text style={{fontSize: 10, color: 'black'}}>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('Leaderboard');
+                }}>
+                <Text style={{fontSize: 10, color: 'black'}}>Leaderboard</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('HomePage');
+                }}>
+                <Text style={{fontSize: 10, color: 'black'}}>Add more flash cards</Text>
+            </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -160,7 +186,64 @@ const HomePage = ({ navigation, route }) => {
 const AccountPage = ({navigation}) => {
     return(
         <View>
-            <Text>Account info</Text>          
+            <Text>Account info</Text>  
+
+
+            <View style={{flexDirection: 'row', padding: 10}}>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('HomePage');
+                }}>     
+                <Text style={{fontSize: 10, color: 'black'}}>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('Leaderboard');
+                }}>
+                <Text style={{fontSize: 10, color: 'black'}}>Leaderboard</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('HomePage');
+                }}>
+                <Text style={{fontSize: 10, color: 'black'}}>Add more flash cards</Text>
+            </TouchableOpacity>
+            </View>          
+        </View>
+    );
+};
+
+const Leaderboard = ({navigation}) => {
+    return(
+        <View>
+            <Text>Leaderboard</Text> 
+
+            <View style={{flexDirection: 'row', padding: 10}}>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('HomePage');
+                }}>     
+                <Text style={{fontSize: 10, color: 'black'}}>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('Leaderboard');
+                }}>
+                <Text style={{fontSize: 10, color: 'black'}}>Leaderboard</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    navigation.navigate('HomePage');
+                }}>
+                <Text style={{fontSize: 10, color: 'black'}}>Add more flash cards</Text>
+            </TouchableOpacity>
+            </View>         
         </View>
     );
 };
@@ -179,7 +262,14 @@ const styles = StyleSheet.create({
     clickable_text: {
         color: 'grey',
         fontSize: 10,
-    }
+    },
+    button: {
+        backgroundColor: '#f0f0f0',
+        padding: 15,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'black',
+    },  
 });
 
 export default App;
