@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
+import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {signUp} from './SignUp';
 import {signIn} from './SignIn';
@@ -13,6 +13,7 @@ const App = () => {
             <Stack.Screen name="SignUpPage" component={SignUpPage} />
             <Stack.Screen name="SignInPage" component={SignInPage} />
             <Stack.Screen name="HomePage" component={HomePage} />
+            <Stack.Screen name="AccountPage" component={AccountPage}/>
           </Stack.Navigator>
         
     );
@@ -130,10 +131,36 @@ const SignInPage = ({navigation, route}) => {
     );
 };
 
-const HomePage = ({navigation, route}) => {
+const HomePage = ({ navigation, route }) => {
+    return (
+        <View>
+            <Text style={{color: 'green', fontSize: 30, fontWeight: 'bold'}} >Experience: </Text>
+            <TouchableOpacity
+                style={{
+                    width: 60,
+                    height: 60,
+                    backgroundColor: 'blue',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: 20, 
+                    alignSelf: 'flex-end',
+                }}
+                onPress={() => {
+                    navigation.navigate('AccountPage');
+                }}
+            >
+                <Text style={{ color: 'white', fontWeight: 'bold'}}>Account</Text>
+            </TouchableOpacity>
+
+            <Text style={{color: 'black', fontSize: 20, textAlign: 'center', justifyContent: 'center'}}>No flash cards here yet :(</Text>
+        </View>
+    );
+};
+
+const AccountPage = ({navigation}) => {
     return(
         <View>
-            <Text>Home</Text>
+            <Text>Account info</Text>          
         </View>
     );
 };
