@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import {signUp} from './functions/SignUp';
 
 export function callSignUp({navigation}){
@@ -8,18 +9,20 @@ export function callSignUp({navigation}){
     const [valid, setValid] = React.useState(true)
     const [errorMsg, setErrorMsg] = React.useState('')
     return (
-        <View>
+        <View style = {styles.app_view}>
             <View>
                 <Text style = {styles.title}>Sign Up</Text>
             </View>
             <View style = {styles.input_view}>
                 <TextInput
                     style = {styles.input}
+                    color = '#A1CCA5'
                     onChangeText={setUser}
                     placeholder='Email'
                 />
                 <TextInput
                     style = {styles.input}
+                    color = '#A1CCA5'
                     onChangeText={setPw}
                     placeholder='Password'
                 />
@@ -33,7 +36,7 @@ export function callSignUp({navigation}){
             <View style = {styles.button_view}>
                 <Button
                     title ='Create Account'
-                    
+                    color = '#A1CCA5'
                     onPress={() => {
                         signUp(user, pw)
                         .then((error) => {
@@ -63,7 +66,7 @@ export function callSignUp({navigation}){
                     navigation.navigate('SignInPage')
                 }}
             >
-                Back To Log In
+                Already have an account?
             </Text>
             </View>
         </View>
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        backgroundColor: '#8FB996',
+        backgroundColor: '#2c462e',
         margin: 10,
         padding: 10
     },
@@ -97,12 +100,20 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 40,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: '#9ee5aa'
     },
     button_view: {
-        backgroundColor: '#8FB996',
+        backgroundColor: '#415D43',
         width: '45%',
-        alignSelf: 'center'
+        alignSelf: 'center',
+    },
+    app_view: {
+        backgroundColor: '#111D13',
+        flex: 1,
+        width: null,
+        height: null,
+        justifyContent: 'center'
     }
 });
 

@@ -33,45 +33,4 @@ const AccountPage = ({navigation}) => {return(callAccount({navigation}))}
     
 const Leaderboard = ({navigation}) => {return(callLeaderboard({navigation}))}
 
-const styles = StyleSheet.create({
-    input_view: {
-        marginTop: 10,
-        alignSelf: 'center',
-        width: '30%'
-    },
-    input: {
-        height: 40,
-        backgroundColor: 'grey',
-        margin: 10,
-        padding: 10
-        
-    },
-    error_msg: {
-        color: 'red',
-        fontSize: 15,
-        marginBottom: 12,
-        textAlign: 'center'
-    },
-    clickableText: {
-        color: 'grey',
-        margin: 10,
-        fontSize: 15,
-        textAlign: 'center',
-        textDecorationLine: 'underline'
-    },
-    title: {
-        fontSize: 40,
-        textAlign: 'center'
-    },
-    button_view: {
-        width: '20%',
-        alignSelf: 'center'
-    },
-    app_view: {
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'space-around'
-    }
-});
-
 export default App;

@@ -8,18 +8,20 @@ export function callSignIn({navigation}){
     const [valid, setValid] = React.useState(true)
     const [errorMsg, setErrorMsg] = React.useState('')
     return (
-        <View>
+        <View style = {styles.app_view}>
             <View>
                 <Text style = {styles.title}>Sign In</Text>
             </View>
             <View style = {styles.input_view}>
                 <TextInput
                     style = {styles.input}
+                    color = '#A1CCA5'
                     onChangeText={setUser}
                     placeholder='Email'
                 />
                 <TextInput
                     style = {styles.input}
+                    color = '#A1CCA5'
                     onChangeText={setPw}
                     placeholder='Password'
                 />
@@ -33,6 +35,7 @@ export function callSignIn({navigation}){
             <View style = {styles.button_view}>
                 <Button
                     title = 'Sign In'
+                    color = '#A1CCA5'
                     onPress={() => {
                         signIn(user, pw)
                         .then((error) => {
@@ -69,10 +72,9 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        backgroundColor: '#8FB996',
+        backgroundColor: '#2c462e',
         margin: 10,
         padding: 10
-        
     },
     error_msg: {
         color: 'red',
@@ -89,12 +91,20 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 40,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: '#9ee5aa'
     },
     button_view: {
-        backgroundColor: '#8FB996',
+        backgroundColor: '#415D43',
         width: '45%',
-        alignSelf: 'center',        
+        alignSelf: 'center',
+    },
+    app_view: {
+        backgroundColor: '#111D13',
+        flex: 1,
+        width: null,
+        height: null,
+        justifyContent: 'center'
     }
 });
 
