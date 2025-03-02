@@ -3,6 +3,9 @@ import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from 'react
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {callSignUp} from './pages/SignUpPage';
 import {callSignIn} from './pages/SignInPage';
+import {callHome} from './pages/HomePage';
+import {callLeaderboard} from './pages/LeaderboardPage';
+import {callAccount} from './pages/AccountPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,121 +27,11 @@ const SignUpPage = ({navigation}) => {return(callSignUp({navigation}))}
 
 const SignInPage = ({navigation}) => {return(callSignIn({navigation}))}
 
-const HomePage = ({navigation}) => {
-    return (
-        <View>
-            <Text style={{color: 'green', fontSize: 30, fontWeight: 'bold'}} >Experience: </Text>
-            <TouchableOpacity
-                style={{
-                    width: 60,
-                    height: 60,
-                    backgroundColor: 'blue',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: 20, 
-                    alignSelf: 'flex-end',
-                    borderRadius: 10,
-                }}
-                onPress={() => {
-                    navigation.navigate('AccountPage');
-                }}
-            >
-                <Text style={{ color: 'white', fontWeight: 'bold'}}>Account</Text>
-            </TouchableOpacity>
+const HomePage = ({navigation}) => {return(callHome({navigation}))}
 
-            <Text style={{color: 'black', fontSize: 20, textAlign: 'center', justifyContent: 'center'}}>No flash cards here yet :(</Text>
-
-            <View style={{flexDirection: 'row', padding: 10}}>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('HomePage');
-                }}>     
-                <Text style={{fontSize: 10, color: 'black'}}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('Leaderboard');
-                }}>
-                <Text style={{fontSize: 10, color: 'black'}}>Leaderboard</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('HomePage');
-                }}>
-                <Text style={{fontSize: 10, color: 'black'}}>Add more flash cards</Text>
-            </TouchableOpacity>
-            </View>
-        </View>
-    );
-};
-
-const AccountPage = ({navigation}) => {
-    return(
-        <View>
-            <Text>Account info</Text>  
-
-
-            <View style={{flexDirection: 'row', padding: 10}}>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('HomePage');
-                }}>     
-                <Text style={{fontSize: 10, color: 'black'}}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('Leaderboard');
-                }}>
-                <Text style={{fontSize: 10, color: 'black'}}>Leaderboard</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('HomePage');
-                }}>
-                <Text style={{fontSize: 10, color: 'black'}}>Add more flash cards</Text>
-            </TouchableOpacity>
-            </View>          
-        </View>
-    );
-};
-
-const Leaderboard = ({navigation}) => {
-    return(
-        <View>
-            <Text>Leaderboard</Text> 
-
-            <View style={{flexDirection: 'row', padding: 10}}>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('HomePage');
-                }}>     
-                <Text style={{fontSize: 10, color: 'black'}}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('Leaderboard');
-                }}>
-                <Text style={{fontSize: 10, color: 'black'}}>Leaderboard</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('HomePage');
-                }}>
-                <Text style={{fontSize: 10, color: 'black'}}>Add more flash cards</Text>
-            </TouchableOpacity>
-            </View>         
-        </View>
-    );
-};
+const AccountPage = ({navigation}) => {return(callAccount({navigation}))}
+    
+const Leaderboard = ({navigation}) => {return(callLeaderboard({navigation}))}
 
 const styles = StyleSheet.create({
     input_view: {
