@@ -1,9 +1,8 @@
 import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import {signUp} from './functions/SignUp';
 
-export function callSignUp({navigation}){
+export default function callSignUp({navigation}){
     const [user, setUser]  = React.useState('');
     const [pw, setPw]  = React.useState('');
     const [valid, setValid] = React.useState(true)
