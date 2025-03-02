@@ -6,7 +6,7 @@ import {callSignIn} from './pages/SignInPage';
 import {callHome} from './pages/HomePage';
 import {callLeaderboard} from './pages/LeaderboardPage';
 import {callAccount} from './pages/AccountPage';
-
+import {AskAi} from './pages/AiGenerate';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -18,10 +18,13 @@ const App = () => {
             <Stack.Screen name="HomePage" component={HomePage} />
             <Stack.Screen name="AccountPage" component={AccountPage}/>
             <Stack.Screen name="Leaderboard" component={Leaderboard}/>
+            <Stack.Screen name="AskAiPage" component={AskAiPage} />
           </Stack.Navigator>
         
     );
 };
+
+const AskAiPage = ({navigation}) => {return(AskAi({navigation}))}
 
 const SignUpPage = ({navigation}) => {return(callSignUp({navigation}))}
 
