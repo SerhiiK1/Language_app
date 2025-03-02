@@ -1,45 +1,75 @@
 import React from 'react';
-import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 
 export function callAccount({navigation}){
     return(
         <View>
             <Text>Account info</Text>  
-    
-
-            <View style={{flexDirection: 'row', padding: 10}}>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('HomePage');
-                }}>     
-                <Text style={styles.button_text}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('Leaderboard');
-                }}>
-                <Text style={styles.button_text}>Leaderboard</Text>
-            </TouchableOpacity>
-          <TouchableOpacity 
-                style={styles.button}
-                onPress={() => {
-                    navigation.navigate('HomePage');
-                }}>
-                <Text style={styles.button_text}>Add more flash cards</Text>
-           </TouchableOpacity>
-           </View>          
+            <View style={styles.account_button}>
+                <Button
+                    title= 'Account'
+                    color= '#415D43'
+                    onPress={() => {
+                        navigation.navigate('AccountPage');
+                    }}
+                >
+                </Button>
+            </View>
+            <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
+                <View style = {styles.button}>
+                <Button 
+                    title= 'Home'
+                    color = '#A1CCA5'
+                    onPress={() => {
+                        navigation.navigate('HomePage');
+                    }}>     
+                </Button>
+                </View>
+                <View style = {styles.button}>
+                    <Button 
+                        title= 'Leaderboard'
+                        color = '#A1CCA5'
+                        onPress={() => {
+                            navigation.navigate('Leaderboard');
+                        }}> 
+                    </Button>
+                </View>
+                <View style = {styles.button}> 
+                    <Button 
+                        title= 'Add more flash cards'
+                        color = '#A1CCA5'
+                        onPress={() => {
+                            navigation.navigate('HomePage');
+                        }}>     
+                    </Button>
+                </View>
+                <View style = {styles.button}> 
+                    <Button 
+                        title= 'Settings'
+                        color = '#A1CCA5'
+                        onPress={() => {
+                            navigation.navigate('SettingsPage');
+                        }}>     
+                    </Button>
+                </View>  
+            </View>          
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    account_button: {
+        backgroundColor: '#415D43',
+        width: 82,
+        height: 82,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     button: {
-        width: '25%', 
+        width: '25%',
+        marginBottom: 10,
         height: '10%',
-        borderWidth: 1,
-        borderColor: 'black',
     },
     button_text: {
         fontSize: 15,

@@ -7,6 +7,8 @@ import {callHome} from './pages/HomePage';
 import {callLeaderboard} from './pages/LeaderboardPage';
 import {callAccount} from './pages/AccountPage';
 import {AskAi} from './pages/AiGenerate';
+import {callSettings} from './pages/SettingsPage';
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -19,6 +21,7 @@ const App = () => {
             <Stack.Screen name="AccountPage" component={AccountPage}/>
             <Stack.Screen name="Leaderboard" component={Leaderboard}/>
             <Stack.Screen name="AskAiPage" component={AskAiPage} />
+            <Stack.Screen name="SettingsPage" component={SettingsPage} />
           </Stack.Navigator>
         
     );
@@ -35,5 +38,7 @@ const HomePage = ({navigation}) => {return(callHome({navigation}))}
 const AccountPage = ({navigation}) => {return(callAccount({navigation}))}
     
 const Leaderboard = ({navigation}) => {return(callLeaderboard({navigation}))}
+
+const SettingsPage = ({navigation}) => {return(callSettings({navigation}))}
 
 export default App;

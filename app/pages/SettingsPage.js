@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 
-export function callLeaderboard({navigation}){
+export function callSettings({navigation}){
     return(
     <View>
-        <Text>Leaderboard</Text> 
+        <Text>Settings</Text> 
             <View style={styles.account_button}>
                 <Button
                     title= 'Account'
@@ -51,7 +51,7 @@ export function callLeaderboard({navigation}){
                             navigation.navigate('SettingsPage');
                         }}>     
                     </Button>
-                </View>
+                </View> 
             </View>         
     </View>
     );
