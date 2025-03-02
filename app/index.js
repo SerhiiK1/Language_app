@@ -6,8 +6,9 @@ import {callSignIn} from './pages/SignInPage';
 import {callHome} from './pages/HomePage';
 import {callLeaderboard} from './pages/LeaderboardPage';
 import {callAccount} from './pages/AccountPage';
-import {AskAi} from './pages/AiGenerate';
+import {AskAi} from './pages/functions/AiGenerate';
 import {callSettings} from './pages/SettingsPage';
+import {CardSet} from './pages/cards/Card'
 
 const Stack = createNativeStackNavigator();
 
@@ -22,10 +23,13 @@ const App = () => {
             <Stack.Screen name="Leaderboard" component={Leaderboard}/>
             <Stack.Screen name="AskAiPage" component={AskAiPage} />
             <Stack.Screen name="SettingsPage" component={SettingsPage} />
+            <Stack.Screen name="CardSet" component={CardSetTrial} />
           </Stack.Navigator>
         
     );
 };
+
+const CardSetTrial = ({navigation}) => {return(CardSet({navigation}))}
 
 const AskAiPage = ({navigation}) => {return(AskAi({navigation}))}
 
