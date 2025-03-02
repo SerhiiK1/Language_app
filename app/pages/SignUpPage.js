@@ -32,7 +32,8 @@ export function callSignUp({navigation}){
             </View>
             <View style = {styles.button_view}>
                 <Button
-                    title = 'Create Account'
+                    title ='Create Account'
+                    
                     onPress={() => {
                         signUp(user, pw)
                         .then((error) => {
@@ -50,7 +51,7 @@ export function callSignUp({navigation}){
                                     setErrorMsg('Email already in use or wrong email')
                                 }
                                 setValid(false)
-                            }
+                            }   
                         })
                     }} 
                 />
@@ -58,10 +59,6 @@ export function callSignUp({navigation}){
             <View>
             <Text 
                 style = {styles.clickableText}
-                onResponderGrant={() => {
-                    setTextStyle('underline')
-                    console.log(textStyle)
-                }}
                 onPress= {() => {
                     navigation.navigate('SignInPage')
                 }}
@@ -104,6 +101,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     button_view: {
+        backgroundColor: 'grey',
         width: '20%',
         alignSelf: 'center'
     }
