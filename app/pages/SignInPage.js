@@ -65,11 +65,11 @@ const styles = StyleSheet.create({
     input_view: {
         marginTop: 10,
         alignSelf: 'center',
-        width: '30%'
+        width: '70%'
     },
     input: {
         height: 40,
-        backgroundColor: 'grey',
+        backgroundColor: '#8FB996',
         margin: 10,
         padding: 10
         
@@ -92,8 +92,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     button_view: {
-        width: '20%',
-        alignSelf: 'center'
+        backgroundColor: '#8FB996',
+        width: '45%',
+        alignSelf: 'center',        
     }
 });
 

@@ -74,14 +74,13 @@ const styles = StyleSheet.create({
     input_view: {
         marginTop: 10,
         alignSelf: 'center',
-        width: '30%'
+        width: '70%'
     },
     input: {
         height: 40,
-        backgroundColor: 'grey',
+        backgroundColor: '#8FB996',
         margin: 10,
         padding: 10
-        
     },
     error_msg: {
         color: 'red',
@@ -101,8 +100,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     button_view: {
-        backgroundColor: 'grey',
-        width: '20%',
+        backgroundColor: '#8FB996',
+        width: '45%',
         alignSelf: 'center'
     }
 });
