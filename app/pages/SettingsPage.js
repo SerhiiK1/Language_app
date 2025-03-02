@@ -3,8 +3,8 @@ import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 
 export function callSettings({navigation}){
     return(
-    <View>
-        <Text>Settings</Text> 
+    <View style={styles.app_view}>
+        <Text style={{color: 'white'}}>Settings</Text> 
             <View style={styles.account_button}>
                 <Button
                     title= 'Account'
@@ -52,7 +52,16 @@ export function callSettings({navigation}){
                         }}>     
                     </Button>
                 </View> 
-            </View>         
+            </View> 
+            <View style={styles.button}>
+                <Button
+                    title= 'AI'
+                    color = '#A1CCA5'
+                    onPress={() => {
+                        navigation.navigate('HomePage');
+                    }}>
+                </Button>
+            </View>
     </View>
     );
 };
@@ -73,5 +82,11 @@ const styles = StyleSheet.create({
     button_text: {
         fontSize: 15,
         color: 'black',
+    },
+    app_view: {
+        backgroundColor: '#111D13',
+        flex: 1,
+        width: null,
+        height: null,
     }
 });

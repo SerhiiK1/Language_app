@@ -3,8 +3,8 @@ import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 
 export function callAccount({navigation}){
     return(
-        <View>
-            <Text>Account info</Text>  
+        <View style={styles.app_view}>
+            <Text style={{color: 'white'}}>Account info</Text>  
             <View style={styles.account_button}>
                 <Button
                     title= 'Account'
@@ -74,5 +74,11 @@ const styles = StyleSheet.create({
     button_text: {
         fontSize: 15,
         color: 'black',
+    },
+    app_view: {
+        backgroundColor: '#111D13',
+        flex: 1,
+        width: null,
+        height: null,
     }
 });
