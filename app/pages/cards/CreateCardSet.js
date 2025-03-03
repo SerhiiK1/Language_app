@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import {View, ScrollView, Text, TextInput, Modal, Pressable, StyleSheet, Dimensions} from 'react-native'
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context'
-import {CardSet} from './Card'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const NewCard = (id) => {
-    const key = id
+const NewCard = () => {
+    
     const [front, setFront] = useState('')
     const [back, setBack] = useState('')
 
@@ -21,11 +20,6 @@ const NewCard = (id) => {
             <TextInput placeholder='Back' 
                 style={styles.textInputStyle}
                 onChangeText={setBack}/>
-
-            <Pressable style={styles.deleteStyle}
-                onPress={() => {}}>
-                <Text>Delete</Text>
-            </Pressable>
         </View>
     )
 }
@@ -34,7 +28,6 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
     const [hoveredButton, setHoveredButton] = useState(null);
     const [cardSet, setCardSet] = useState([])
     const [id, setId] = useState(0)
-
     return(
         <SafeAreaProvider>
             <SafeAreaView>
@@ -48,10 +41,12 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                 >
                     <View style = {styles.modalContainer}>
                         <View style = {styles.modalView}>
-                            <View style = {styles.modalContent}>
-                                <Text>Enter the name of the card set</Text>
-                                {cardSet}
-                            </View>
+                            <ScrollView>
+                                <View style = {styles.modalContent}>
+                                    <Text>Enter the name of the card set</Text>
+                                    {cardSet}
+                                </View>
+                            </ScrollView>
                             <View style = {styles.modalBottom}>
                                 <Pressable 
                                     onPress={() => {setVisible(!visible)}}
@@ -63,8 +58,8 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                                 </Pressable>
                                 <Pressable 
                                     onPress={() => { 
-                                        setCardSet([...cardSet, <NewCard key={id}/>])
-                                        setId(id + 1)
+                                        setCardSet([...cardSet, <NewCard />])
+
 
                                     }}
                                     onMouseEnter={() => setHoveredButton('add')}
@@ -134,7 +129,7 @@ const styles = StyleSheet.create({
     },
     newCardStyle:{
         height: 100,
-        width: windowWidth * 0.75,
+        width: windowWidth * 0.7,
         flexDirection: 'row',
         justifyContent: 'space-around',
         backgroundColor: 'grey',
