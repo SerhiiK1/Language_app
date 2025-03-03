@@ -49,7 +49,7 @@ const DeleteCard = ({deleteVisible, setDeleteVisible}) => {
                         <View style={styles.modalContainer}>
                             <View style={styles.modalView2}>
                                 <View style={styles.modalContent}>
-                                    <Text style={{fontSize: 10, color: 'red'}}>Are you sure you want delete the set?</Text>
+                                    <Text style={{fontSize: 20, color: 'red'}}>Are you sure you want delete the set?</Text>
                                 </View>
                                 <View style = {styles.modalBottom}>
                                     <Pressable 

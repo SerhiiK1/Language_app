@@ -73,7 +73,7 @@ export function CardSet ({navigation}) {
             <SafeAreaView>
                 <TouchableOpacity  style = {{width: 200, height: 100, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', backgroundColor: '#415D43'}}
                     onPress={() => {
-                        //setCreateCardVisible(true); for now it deos not work
+                        //setCreateCardVisible(true); for now it does not work
                         navigation.navigate('HomePage');
                     }}
                     >

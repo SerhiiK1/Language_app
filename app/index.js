@@ -7,7 +7,7 @@ import {callLeaderboard} from './pages/LeaderboardPage';
 import {callAccount} from './pages/AccountPage';
 import {AskAi} from './pages/functions/AiGenerate';
 import {callSettings} from './pages/SettingsPage';
-import {CardSet} from './pages/cards/Card'
+import {CardSet} from './pages/cards/Card';
 
 const Stack = createNativeStackNavigator();
 
