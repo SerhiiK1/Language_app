@@ -9,7 +9,7 @@ const NewCard = () => {
     
     const [front, setFront] = useState('')
     const [back, setBack] = useState('')
-
+    const [deleteVisible, setDeleteVisible] = useState(false)
     return(
         <View style = {styles.newCardStyle}>
             <TextInput placeholder='Front' 
@@ -22,14 +22,17 @@ const NewCard = () => {
                 onChangeText={setBack}/>
 
             <Pressable style={styles.deleteStyle}
-                onPress={() => {DeleteCard}}>
+                onPress={() => {
+                    setDeleteVisible(true);
+                }}>
                 <Text>Delete</Text>
             </Pressable>
+            <DeleteCard deleteVisible={deleteVisible} setDeleteVisible={setDeleteVisible}/>
         </View>
     )
 }
 
-const DeleteCard = () => {
+const DeleteCard = ({deleteVisible, setDeleteVisible}) => {
     const [cardSet, setCardSet] = useState([])
     const [hoveredButton, setHoveredButton] = useState(null);
 
@@ -38,10 +41,10 @@ const DeleteCard = () => {
             <SafeAreaView>
                 <Modal
                     animationType='none'
-                    transparent= {false}
-                    visible = {visible}
+                    transparent= {true}
+                    visible = {deleteVisible}
                     onRequestClose={() => {
-                        setVisible(!visible)
+                        setDeleteVisible(!deleteVisible)
                     }}>
                         <View style={styles.modalContainer}>
                             <View style={styles.modalView2}>
@@ -50,7 +53,7 @@ const DeleteCard = () => {
                                 </View>
                                 <View style = {styles.modalBottom}>
                                     <Pressable 
-                                        onPress={() => {setVisible(!visible)}}
+                                        onPress={() => {setDeleteVisible(false)}}
                                         onMouseEnter={() => setHoveredButton('Cancel')}
                                         onMouseLeave={() => setHoveredButton(null)}
                                         style = {styles.modalContentBottom}>
@@ -59,7 +62,7 @@ const DeleteCard = () => {
                                     </Pressable>
                                     <Pressable
                                         onPress={() => {
-                                            setVisible(!visible)
+                                            setDeleteVisible(false)
                                         }}
                                         onMouseEnter={() => setHoveredButton('Delete')}
                                         onMouseLeave={() => setHoveredButton(null)}
@@ -152,8 +155,7 @@ const styles = StyleSheet.create({
         shadowRadius: 1000,
         shadowOpacity: 1,
         elevation: 5,
-        borderRadius: 20
-        
+        borderRadius: 20,
     },
     modalContainer:{
         flex: 1,
