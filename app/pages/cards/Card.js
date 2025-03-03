@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import {TouchableOpacity, Text, StyleSheet } from 'react-native';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 const Card = ({front, back}) => {
     const [isFlipped, setFlipped] = React.useState(false)
@@ -49,24 +50,34 @@ export function CardSet ({navigation}) {
     }
 
     return(
-        <View style = {styles.container}>
-            <TouchableOpacity style = {[styles.card, backDisable && styles.disabledButton]} 
-                disabled = {backDisable} 
-                onPress={decrement}>
-                <Text>back</Text>
-            </TouchableOpacity>
-            <Card front = {card[index].front} back = {card[index].back} />
-            <TouchableOpacity style = {[styles.card, frontDisable && styles.disabledButton]} 
-                disabled = {frontDisable} 
-                onPress={increment}>
-                <Text>next</Text>
-            </TouchableOpacity>
-        </View>
+        <SafeAreaProvider>
+            <SafeAreaView style = {styles.container}>
+                <TouchableOpacity style = {[styles.card, backDisable && styles.disabledButton]} 
+                    disabled = {backDisable} 
+                    onPress={decrement}>
+                    <Text>back</Text>
+                </TouchableOpacity>
+                {card.length > 0 && (
+                    <Card front = {card[index].front} back = {card[index].back} />
+                )}
+                <TouchableOpacity style = {[styles.card, frontDisable && styles.disabledButton]} 
+                    disabled = {frontDisable} 
+                    onPress={increment}>
+                    <Text>next</Text>
+                </TouchableOpacity>
+            </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20, alignItems: "center" , flexDirection: 'row', justifyContent: 'space-between'},
+    container: { 
+        flex: 1, 
+        padding: 20,
+        alignItems: "center" , 
+        flexDirection: 'row', 
+        justifyContent: 'space-between'
+    },
     card: {
         width: 200,
         height: 150,

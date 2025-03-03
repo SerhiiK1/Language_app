@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import {signIn} from './functions/SignIn';
 
 export function callSignIn({navigation}){
@@ -8,59 +9,61 @@ export function callSignIn({navigation}){
     const [valid, setValid] = React.useState(true)
     const [errorMsg, setErrorMsg] = React.useState('')
     return (
-        <View style = {styles.app_view}>
-            <View>
-                <Text style = {styles.title}>Sign In</Text>
-            </View>
-            <View style = {styles.input_view}>
-                <TextInput
-                    style = {styles.input}
-                    color = '#A1CCA5'
-                    onChangeText={setUser}
-                    placeholder='Email'
-                />
-                <TextInput
-                    style = {styles.input}
-                    color = '#A1CCA5'
-                    onChangeText={setPw}
-                    placeholder='Password'
-                />
-                <Text
-                    visibility = {valid}
-                    style = {styles.error_msg}
+        <SafeAreaProvider>
+            <SafeAreaView style = {styles.app_view}>
+                <View>
+                    <Text style = {styles.title}>Sign In</Text>
+                </View>
+                <View style = {styles.input_view}>
+                    <TextInput
+                        style = {styles.input}
+                        color = '#A1CCA5'
+                        onChangeText={setUser}
+                        placeholder='Email'
+                    />
+                    <TextInput
+                        style = {styles.input}
+                        color = '#A1CCA5'
+                        onChangeText={setPw}
+                        placeholder='Password'
+                    />
+                    <Text
+                        visibility = {valid}
+                        style = {styles.error_msg}
+                    >
+                        {errorMsg}
+                    </Text>
+                </View>
+                <View style = {styles.button_view}>
+                    <Button
+                        title = 'Sign In'
+                        color = '#A1CCA5'
+                        onPress={() => {
+                            signIn(user, pw)
+                            .then((error) => {
+                                if (!error) {
+                                    setValid(true)
+                                    navigation.navigate('HomePage')
+                                } else {
+                                    setErrorMsg('Wrong email or Password')
+                                    setValid(false)
+                                }
+                            })
+                        }} 
+                    />
+                </View>
+                <View>
+                <Text 
+                    style = {styles.clickableText}
+                    onPress= {() => {
+                        navigation.navigate('SignUpPage')
+                    }}
                 >
-                    {errorMsg}
+                    Create an account
                 </Text>
-            </View>
-            <View style = {styles.button_view}>
-                <Button
-                    title = 'Sign In'
-                    color = '#A1CCA5'
-                    onPress={() => {
-                        signIn(user, pw)
-                        .then((error) => {
-                            if (!error) {
-                                setValid(true)
-                                navigation.navigate('HomePage')
-                            } else {
-                                setErrorMsg('Wrong email or Password')
-                                setValid(false)
-                            }
-                        })
-                    }} 
-                />
-            </View>
-            <View>
-            <Text 
-                style = {styles.clickableText}
-                onPress= {() => {
-                    navigation.navigate('SignUpPage')
-                }}
-            >
-                Create an account
-            </Text>
-            </View>
-        </View>
+                </View>
+            </SafeAreaView>
+        </SafeAreaProvider>
     );
 };
 

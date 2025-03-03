@@ -1,5 +1,4 @@
 import React from 'react';
-import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {callSignUp} from './pages/SignUpPage';
 import {callSignIn} from './pages/SignInPage';
@@ -14,7 +13,6 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
     return (
-        
           <Stack.Navigator>
             <Stack.Screen name="SignUpPage" component={SignUpPage} />
             <Stack.Screen name="SignInPage" component={SignInPage} />
@@ -25,7 +23,6 @@ const App = () => {
             <Stack.Screen name="SettingsPage" component={SettingsPage} />
             <Stack.Screen name="CardSet" component={CardSetTrial} />
           </Stack.Navigator>
-        
     );
 };
 

@@ -1,59 +1,62 @@
 import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 export function callAccount({navigation}){
     return(
-        <View style={styles.app_view}>
-            <Text style={{color: 'white'}}>Account info</Text>  
-            <View style={styles.account_button}>
-                <Button
-                    title= 'Account'
-                    color= '#415D43'
-                    onPress={() => {
-                        navigation.navigate('AccountPage');
-                    }}
-                >
-                </Button>
-            </View>
-            <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
-                <View style = {styles.button}>
-                <Button 
-                    title= 'Home'
-                    color = '#A1CCA5'
-                    onPress={() => {
-                        navigation.navigate('HomePage');
-                    }}>     
-                </Button>
-                </View>
-                <View style = {styles.button}>
-                    <Button 
-                        title= 'Leaderboard'
-                        color = '#A1CCA5'
+        <SafeAreaProvider>
+            <SafeAreaView style={styles.app_view}>
+                <Text style={{color: 'white'}}>Account info</Text>  
+                <View style={styles.account_button}>
+                    <Button
+                        title= 'Account'
+                        color= '#415D43'
                         onPress={() => {
-                            navigation.navigate('Leaderboard');
-                        }}> 
+                            navigation.navigate('AccountPage');
+                        }}
+                    >
                     </Button>
                 </View>
-                <View style = {styles.button}> 
+                <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
+                    <View style = {styles.button}>
                     <Button 
-                        title= 'Add more flash cards'
+                        title= 'Home'
                         color = '#A1CCA5'
                         onPress={() => {
                             navigation.navigate('HomePage');
                         }}>     
                     </Button>
-                </View>
-                <View style = {styles.button}> 
-                    <Button 
-                        title= 'Settings'
-                        color = '#A1CCA5'
-                        onPress={() => {
-                            navigation.navigate('SettingsPage');
-                        }}>     
-                    </Button>
-                </View>  
-            </View>          
-        </View>
+                    </View>
+                    <View style = {styles.button}>
+                        <Button 
+                            title= 'Leaderboard'
+                            color = '#A1CCA5'
+                            onPress={() => {
+                                navigation.navigate('Leaderboard');
+                            }}> 
+                        </Button>
+                    </View>
+                    <View style = {styles.button}> 
+                        <Button 
+                            title= 'Add more flash cards'
+                            color = '#A1CCA5'
+                            onPress={() => {
+                                navigation.navigate('HomePage');
+                            }}>     
+                        </Button>
+                    </View>
+                    <View style = {styles.button}> 
+                        <Button 
+                            title= 'Settings'
+                            color = '#A1CCA5'
+                            onPress={() => {
+                                navigation.navigate('SettingsPage');
+                            }}>     
+                        </Button>
+                    </View>  
+                </View>          
+            </SafeAreaView>
+        </SafeAreaProvider>
     );
 };
 

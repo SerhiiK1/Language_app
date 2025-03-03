@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import {signUp} from './functions/SignUp';
 
 export function callSignUp({navigation}){
@@ -8,67 +9,69 @@ export function callSignUp({navigation}){
     const [valid, setValid] = React.useState(true)
     const [errorMsg, setErrorMsg] = React.useState('')
     return (
-        <View style = {styles.app_view}>
-            <View>
-                <Text style = {styles.title}>Sign Up</Text>
-            </View>
-            <View style = {styles.input_view}>
-                <TextInput
-                    style = {styles.input}
-                    color = '#A1CCA5'
-                    onChangeText={setUser}
-                    placeholder='Email'
-                />
-                <TextInput
-                    style = {styles.input}
-                    color = '#A1CCA5'
-                    onChangeText={setPw}
-                    placeholder='Password'
-                />
-                <Text
-                    visibility = {valid}
-                    style = {styles.error_msg}
+        <SafeAreaProvider>
+            <SafeAreaView style = {styles.app_view}>
+                <View>
+                    <Text style = {styles.title}>Sign Up</Text>
+                </View>
+                <View style = {styles.input_view}>
+                    <TextInput
+                        style = {styles.input}
+                        color = '#A1CCA5'
+                        onChangeText={setUser}
+                        placeholder='Email'
+                    />
+                    <TextInput
+                        style = {styles.input}
+                        color = '#A1CCA5'
+                        onChangeText={setPw}
+                        placeholder='Password'
+                    />
+                    <Text
+                        visibility = {valid}
+                        style = {styles.error_msg}
+                    >
+                        {errorMsg}
+                    </Text>
+                </View>
+                <View style = {styles.button_view}>
+                    <Button
+                        title ='Create Account'
+                        color = '#A1CCA5'
+                        onPress={() => {
+                            signUp(user, pw)
+                            .then((error) => {
+                                if (!error) {
+                                    setValid(true)
+                                    navigation.navigate('HomePage')
+                                } else {
+                                    if (user.length === 0 || !(user.includes('@'))) {
+                                        setErrorMsg('Invalid email')
+                                    }
+                                    else if (pw.length < 8){
+                                        setErrorMsg('Password must be 8 characters long')
+                                    }
+                                    else {
+                                        setErrorMsg('Email already in use or wrong email')
+                                    }
+                                    setValid(false)
+                                }   
+                            })
+                        }} 
+                    />
+                </View>
+                <View>
+                <Text 
+                    style = {styles.clickableText}
+                    onPress= {() => {
+                        navigation.navigate('SignInPage')
+                    }}
                 >
-                    {errorMsg}
+                    Already have an account?
                 </Text>
-            </View>
-            <View style = {styles.button_view}>
-                <Button
-                    title ='Create Account'
-                    color = '#A1CCA5'
-                    onPress={() => {
-                        signUp(user, pw)
-                        .then((error) => {
-                            if (!error) {
-                                setValid(true)
-                                navigation.navigate('HomePage')
-                            } else {
-                                if (user.length === 0 || !(user.includes('@'))) {
-                                    setErrorMsg('Invalid email')
-                                }
-                                else if (pw.length < 8){
-                                    setErrorMsg('Password must be 8 characters long')
-                                }
-                                else {
-                                    setErrorMsg('Email already in use or wrong email')
-                                }
-                                setValid(false)
-                            }   
-                        })
-                    }} 
-                />
-            </View>
-            <View>
-            <Text 
-                style = {styles.clickableText}
-                onPress= {() => {
-                    navigation.navigate('SignInPage')
-                }}
-            >
-                Already have an account?
-            </Text>
-            </View>
-        </View>
+                </View>
+            </SafeAreaView>
+        </SafeAreaProvider>
     );
 };
 
