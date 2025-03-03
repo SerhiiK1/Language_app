@@ -19,6 +19,16 @@ export function callHome({navigation}){
                     >
                     </Button>
                 </View>
+                <View style ={{width: 300, height: 40, backgroundColor: '#415D43', justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
+                    <Button
+                        title= 'Practice flash cards'
+                        color= '415D43'
+                        onPress={() => {
+                            navigation.navigate('CardSet')
+                        }}
+                        >
+                    </Button>
+                </View>
                 <Text style={{color: 'white', fontSize: 20, textAlign: 'center', justifyContent: 'center'}}>No flash cards here yet :(</Text>
 
                 <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
