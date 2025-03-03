@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import CreateCardSet from './CreateCardSet';
 
 const Card = ({front, back}) => {
     const [isFlipped, setFlipped] = React.useState(false)
@@ -17,6 +18,8 @@ const Card = ({front, back}) => {
 }
 
 export function CardSet ({navigation}) {
+   // const [CreateCardVisible, setCreateCardVisible] = React.useState(false) can be changed if needed
+
     const card = [
         {front: 'hello', back: 'hola'},
         {front: 'bye', back: 'adios'},
@@ -49,6 +52,7 @@ export function CardSet ({navigation}) {
         }
     }
 
+   
     return(
         <SafeAreaProvider>
             <SafeAreaView style = {styles.container}>
@@ -65,6 +69,22 @@ export function CardSet ({navigation}) {
                     onPress={increment}>
                     <Text>next</Text>
                 </TouchableOpacity>
+            </SafeAreaView>
+            <SafeAreaView>
+                <TouchableOpacity  style = {{width: 200, height: 100, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', backgroundColor: '#415D43'}}
+                    onPress={() => {
+                        //setCreateCardVisible(true); for now it deos not work
+                        navigation.navigate('HomePage');
+                    }}
+                    >
+                    <Text style={{color: 'white'}}>Create more flash cards</Text>
+                </TouchableOpacity>
+                {/**
+                <CreateCardSet navigation={navigation} 
+                    visible={CreateCardVisible} 
+                    setVisible={setCreateCardVisible}
+                />
+                Will be changed later*/}
             </SafeAreaView>
         </SafeAreaProvider>
     )

@@ -1,8 +1,23 @@
 import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+//import { doc, getDoc } from "firebase/firestore";
+//import { db } from "./firebase";
+
 
 export function callAccount({navigation}){
+    /**
+    const fetchUserData = async (uid) => {
+        const userDoc = doc(db, "users", uid);
+        const userSnapshot = await getDoc(userDoc);
+      
+        if (userSnapshot.exists()) {
+          console.log("User Data:", userSnapshot.data());
+        } else {
+          console.log("No such user data found!");
+        }
+    };
+    To get user data but it does not work yet*/
     return(
         <SafeAreaProvider>
             <SafeAreaView style={styles.app_view}>
