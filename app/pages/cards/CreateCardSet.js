@@ -23,10 +23,57 @@ const NewCard = (id) => {
                 onChangeText={setBack}/>
 
             <Pressable style={styles.deleteStyle}
-                onPress={() => {}}>
+                onPress={() => {DeleteCard}}>
                 <Text>Delete</Text>
             </Pressable>
         </View>
+    )
+}
+
+const DeleteCard = () => {
+    const [cardSet, setCardSet] = useState([])
+    const [hoveredButton, setHoveredButton] = useState(null);
+
+    return(
+        <SafeAreaProvider>
+            <SafeAreaView>
+                <Modal
+                    animationType='none'
+                    transparent= {false}
+                    visible = {visible}
+                    onRequestClose={() => {
+                        setVisible(!visible)
+                    }}>
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalView2}>
+                                <View style={styles.modalContent}>
+                                    <Text style={{fontSize: 10, color: 'red'}}>Are you sure you want delete the set?</Text>
+                                </View>
+                                <View style = {styles.modalBottom}>
+                                    <Pressable 
+                                        onPress={() => {setVisible(!visible)}}
+                                        onMouseEnter={() => setHoveredButton('Cancel')}
+                                        onMouseLeave={() => setHoveredButton(null)}
+                                        style = {styles.modalContentBottom}>
+                                            <Text style={hoveredButton === 'Cancel' 
+                                                ? styles.hoveredText : null}>Cancel</Text>
+                                    </Pressable>
+                                    <Pressable
+                                        onPress={() => {
+                                            setVisible(!visible)
+                                        }}
+                                        onMouseEnter={() => setHoveredButton('Delete')}
+                                        onMouseLeave={() => setHoveredButton(null)}
+                                        style = {styles.modalContentBottom}>
+                                            <Text style={hoveredButton === 'Delete' 
+                                                ? styles.hoveredText : null}>Delete</Text>
+                                    </Pressable>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+            </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
 
@@ -154,7 +201,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width:60
-    }
+    },
+    modalView2:{
+        alignItems: 'center',
+        height: windowHeight * 0.4,
+        width: windowWidth * 0.6,
+        padding: 30,
+        backgroundColor: 'white',
+        shadowColor: 'black',
+        shadowRadius: 800,
+        shadowOpacity: 1,
+        elevation: 5,
+        borderRadius: 20   
+    },
 });
 
 export default CreateCardSet
