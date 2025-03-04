@@ -34,7 +34,6 @@ export function callAccount({navigation}){
         if (user) {
             fetchUserData(user.uid).then((data) => {
                 setUserData(data);
-                setExperienceData(user.uid, 0)
             });
         }
     }, [user]);
@@ -68,7 +67,7 @@ export function callAccount({navigation}){
                     >
                     </Button>
                 </View>
-                <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
+                <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
                     <Button 
                         title= 'Home'
@@ -128,6 +127,13 @@ const styles = StyleSheet.create({
     button_text: {
         fontSize: 15,
         color: 'black',
+    },
+    bottom_buttons:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        width: '100%',     
+        flex: 1,
     },
     app_view: {
         backgroundColor: '#111D13',
