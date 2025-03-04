@@ -58,6 +58,7 @@ export function callHome({navigation}){
         if (user) {
             fetchUserData(user.uid).then((data) => {
                 setUserData(data);
+                setExperienceData(user.uid, 0);
             });
         }
     }, [user]);
