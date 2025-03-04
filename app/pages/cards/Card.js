@@ -21,7 +21,13 @@ const Card = ({front, back}) => {
 export function CardSet({navigation, name}) {
    // const [CreateCardVisible, setCreateCardVisible] = React.useState(false) can be changed if needed
     const [card, setCard] = React.useState([])
+    const [index, setIndex] = React.useState(0)
+
+    const [frontDisable, setFrontDisable] = React.useState(false)
+    const [backDisable, setBackDisable] = React.useState(true)
+
     React.useEffect(() => {
+
         getItem(name).then((cards) => {
             cards.map((card) => {
                 setCard([...cards, {front: card.front, back: card.back}])
@@ -29,28 +35,29 @@ export function CardSet({navigation, name}) {
         })
     }, [])
 
-    const [index, setIndex] = React.useState(0)
-
-    const [frontDisable, setFrontDisable] = React.useState(false)
-    const [backDisable, setBackDisable] = React.useState(true)
+    
 
     const increment = () => {
-        if (index < card.length - 1){
+        let localIndex = index + 1
+        
+        if (localIndex <= card.length - 1){
             setBackDisable(false)
-            if (index == card.length - 2) {
+            if (localIndex == card.length - 2) {
                 setFrontDisable(true)
             }
-            setIndex(index + 1)
+            setIndex(localIndex)
         }
+
     }
 
     const decrement = () => {
-        if (index > 0){
+        let localIndex = index -1
+        if (localIndex >= 0){
             setFrontDisable(false)
-            if (index == 1) {
+            if (localIndex == 0) {
                 setBackDisable(true)
             }
-            setIndex(index - 1)
+            setIndex(localIndex)
         }
     }
 
