@@ -54,7 +54,7 @@ const DeleteCardModal = ({ deleteVisible, setDeleteVisible, setVisible}) => {
                                 <View style={styles.modalContent}>
                                     <Text style={{fontSize: 20, color: 'red'}}>Are you sure you want delete the card?</Text>
                                 </View>
-                                <View style = {styles.modalBottom}>
+                                <View style = {styles.modalButtonBottom}>
                                     <Pressable 
                                         onPress={() => {setDeleteVisible(false)}}
                                         onMouseEnter={() => setHoveredButton('Cancel')}
@@ -85,11 +85,66 @@ const DeleteCardModal = ({ deleteVisible, setDeleteVisible, setVisible}) => {
     )
 }
 
+const CloseCreateCardModal = ({closeVisible, setCloseVisible, setVisible,visible, setCardSet, setName, setId, setErrorMsg}) => {
+    const [hoveredButton, setHoveredButton] = useState(null);
+
+    return(
+        <SafeAreaProvider>
+            <SafeAreaView>
+                <Modal
+                    animationType='none'
+                    transparent = {true}
+                    visible = {closeVisible}
+                    onRequestClose={() => {
+                        setCloseVisible(!closeVisible)
+                    }}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalView2}>
+                            <View style={styles.modalContent}>
+                                <Text style={{fontSize: 20, color: 'red'}}>Are you sure you want close?</Text>
+                                <Text style={{fontSize: 10}}>All progress will be lost</Text>
+                            </View>
+                            <View style = {styles.modalButtonBottom}>
+                                <Pressable 
+                                    onPress={() => {setCloseVisible(false)}}
+                                    onMouseEnter={() => setHoveredButton('Cancel')}
+                                    onMouseLeave={() => setHoveredButton(null)}
+                                    style = {styles.modalContentBottom}>
+                                        <Text style={hoveredButton === 'Cancel' 
+                                            ? styles.hoveredText : null}>Cancel</Text>
+                                </Pressable>
+                                <Pressable
+                                    onPress={() => {
+                                        setCloseVisible(false)
+                                        setVisible(!visible)
+                                        setCardSet([])
+                                        setName('')
+                                        setId(0)
+                                        setErrorMsg('')
+                                    }}
+                                    onMouseEnter={() => setHoveredButton('Close')}
+                                    onMouseLeave={() => setHoveredButton(null)}
+                                    style = {styles.modalContentBottom}>
+                                        <Text style={hoveredButton === 'Close' 
+                                            ? styles.hoveredText : null}>Close</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            </SafeAreaView>
+        </SafeAreaProvider>
+    )
+}
 const CreateCardSet = ({navigation, visible, setVisible}) => {
     const [name, setName] = useState('')
     const [cardSet, setCardSet] = useState([])
     const [hoveredButton, setHoveredButton] = useState(null);
     const [id, setId] = useState(0)
+    const [letSave, setLetSave] = useState(true)
+    const [errorMsg, setErrorMsg] = useState('')
+    const [closeVisible, setCloseVisible] = useState(false)
 
     const addCard = () => {
         setCardSet([...cardSet, {id: id, front: '', back: '', visible: true}])
@@ -108,22 +163,43 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
         setCardSet(cardSet.map((card) => (card.id === id? {...card, back: back} : card)))
     }
 
-    const saveCardSet = () => {
-        let localId = 0
-        const outCard = []
-        cardSet.map((card) => {
-            if (card.visible){
-                outCard.push({id: localId, front: card.front, back: card.back})
-                localId += 1
+    async function saveCardSet () {
+        let errorMessage = '';
+        let canSave = true;
+        let localId = 0;
+        const outCard = [];
+        if (name === '') {
+            canSave = false;
+            errorMessage = 'Name of set must be filled'
+        }
+        else {
+            cardSet.forEach((card) => {
+                if (card.visible){
+                    if (card.front !== '' && card.back !== '') {
+                    
+                        outCard.push({id: localId, front: card.front, back: card.back});
+                        localId += 1;
+                    
+                    } else {
+                        canSave = false;
+                        errorMessage = 'Cards must be filled';
+                    }
+                }
+            });
+        }
+        setLetSave(canSave);
+        setErrorMsg(errorMessage);
+        try {
+            if (canSave) {
+                await setItem(name, outCard);
+                navigation.navigate('CardSet', { name });
+                setVisible(!visible);
             }
-        })
-        try{
-            setItem(name, outCard)
-            console.log('Card set saved')
-        } catch (e){
-            console.log('Error saving')
+        } catch (e) {
+            console.log('Error saving');
         }
     }
+
     return(
         <SafeAreaProvider>
             <SafeAreaView>
@@ -160,39 +236,58 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                                 </View>
                             </ScrollView>
                             <View style = {styles.modalBottom}>
-                                <Pressable 
-                                    onPress={() => {setVisible(!visible)}}
-                                    onMouseEnter={() => setHoveredButton('close')}
-                                    onMouseLeave={() => setHoveredButton(null)}
-                                    style = {styles.modalContentBottom}>
-                                        <Text style={hoveredButton === 'close' 
-                                            ? styles.hoveredText : null}>Close</Text>
-                                </Pressable>
-                                <Pressable 
-                                    onPress={() => {addCard()}}
-                                    onMouseEnter={() => setHoveredButton('add')}
-                                    onMouseLeave={() => setHoveredButton(null)}
-                                    style = {styles.modalContentBottom}>
-                                        <Text style={hoveredButton === 'add' 
-                                            ? styles.hoveredText : null}>+</Text>
-                                </Pressable>
-                                <Pressable 
-                                    onPress={() => { 
-                                        navigation.navigate('CardSet')
-                                        setVisible(!visible)
-                                        saveCardSet()
-                                    }}
-                                    onMouseEnter={() => setHoveredButton('create')}
-                                    onMouseLeave={() => setHoveredButton(null)}
-                                    style = {styles.modalContentBottom}>
-                                        <Text style={hoveredButton === 'create' 
-                                            ? styles.hoveredText : null}>Create</Text>
-                                </Pressable>
-
+                                <View style = {styles.error_message_view}>
+                                    {!letSave &&
+                                    <Text style = {styles.error_message}>{errorMsg}</Text>}
+                                </View>
+                                <View style = {styles.modalButtonBottom}>
+                                    <Pressable 
+                                        onPress={() => {
+                                            setCloseVisible(true)
+                                            // setVisible(!visible)
+                                            // setCardSet([])
+                                            //setName('')
+                                            //setId(0)
+                                            // setErrorMsg('')
+                                        }}
+                                        onMouseEnter={() => setHoveredButton('close')}
+                                        onMouseLeave={() => setHoveredButton(null)}
+                                        style = {styles.modalContentBottom}>
+                                            <Text style={hoveredButton === 'close' 
+                                                ? styles.hoveredText : null}>Close</Text>
+                                    </Pressable>
+                                    <Pressable 
+                                        onPress={() => {addCard()}}
+                                        onMouseEnter={() => setHoveredButton('add')}
+                                        onMouseLeave={() => setHoveredButton(null)}
+                                        style = {styles.modalContentBottom}>
+                                            <Text style={hoveredButton === 'add' 
+                                                ? styles.hoveredText : null}>+</Text>
+                                    </Pressable>
+                                    <Pressable 
+                                        onPress={() => {
+                                            saveCardSet();
+                                                                                    }}
+                                        onMouseEnter={() => setHoveredButton('create')}
+                                        onMouseLeave={() => setHoveredButton(null)}
+                                        style = {styles.modalContentBottom}>
+                                            <Text style={hoveredButton === 'create' 
+                                                ? styles.hoveredText : null}>Create</Text>
+                                    </Pressable>
+                                </View>
                             </View>
                         </View>
                     </View>
                 </Modal>
+                <CloseCreateCardModal closeVisible={closeVisible} 
+                    setCloseVisible={setCloseVisible}
+                    setVisible={setVisible}
+                    visible={visible} 
+                    setCardSet={setCardSet} 
+                    setName={setName} 
+                    setId={setId} 
+                    setErrorMsg={setErrorMsg}
+                />
             </SafeAreaView>
         </SafeAreaProvider>
     );
@@ -223,6 +318,11 @@ const styles = StyleSheet.create({
     },
     modalBottom:{
         padding: 10,
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        width: '100%',
+    },
+    modalButtonBottom:{
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',
@@ -281,6 +381,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         width: '100%',
         padding:10,
+    },
+    error_message:{
+        color: 'red',
+        fontSize: 15,
+    },
+    error_message_view:{
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
 
