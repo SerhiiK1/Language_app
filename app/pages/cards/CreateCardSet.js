@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {View, ScrollView, Text, TextInput, Modal, Pressable, StyleSheet, Dimensions} from 'react-native'
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context'
+import {setItem, getItem} from '../../utils/AsyncStorage'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -85,6 +86,7 @@ const DeleteCardModal = ({ deleteVisible, setDeleteVisible, setVisible}) => {
 }
 
 const CreateCardSet = ({navigation, visible, setVisible}) => {
+    const [name, setName] = useState('')
     const [cardSet, setCardSet] = useState([])
     const [hoveredButton, setHoveredButton] = useState(null);
     const [id, setId] = useState(0)
@@ -106,6 +108,22 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
         setCardSet(cardSet.map((card) => (card.id === id? {...card, back: back} : card)))
     }
 
+    const saveCardSet = () => {
+        let localId = 0
+        const outCard = []
+        cardSet.map((card) => {
+            if (card.visible){
+                outCard.push({id: localId, front: card.front, back: card.back})
+                localId += 1
+            }
+        })
+        try{
+            setItem(name, outCard)
+            console.log('Card set saved')
+        } catch (e){
+            console.log('Error saving')
+        }
+    }
     return(
         <SafeAreaProvider>
             <SafeAreaView>
@@ -120,8 +138,14 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                     <View style = {styles.modalContainer}>
                         <View style = {styles.modalView}>
                             <ScrollView>
+                                <View style = {styles.modalTitle}>
+                                    <Text style={styles.title}>Create a card set</Text>
+                                    <TextInput placeholder='Card Set Name'
+                                        style={styles.textInputStyle}
+                                        onChangeText={setName}
+                                        value={name}/>
+                                </View>
                                 <View style = {styles.modalContent}>
-                                    <Text>Enter the name of the card set</Text>
                                     {cardSet.map((card) => {return(
                                         <NewCard 
                                             key = {card.id}
@@ -156,6 +180,7 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                                     onPress={() => { 
                                         navigation.navigate('CardSet')
                                         setVisible(!visible)
+                                        saveCardSet()
                                     }}
                                     onMouseEnter={() => setHoveredButton('create')}
                                     onMouseLeave={() => setHoveredButton(null)}
@@ -245,6 +270,18 @@ const styles = StyleSheet.create({
         elevation: 5,
         borderRadius: 20   
     },
+    modalTitle:{
+        width: windowWidth * 0.7,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        
+    },
+    title:{
+        fontSize: 20,
+        fontWeight: 'bold',
+        width: '100%',
+        padding:10,
+    }
 });
 
 export default CreateCardSet
