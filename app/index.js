@@ -26,7 +26,10 @@ const App = () => {
     );
 };
 
-const CardSetTrial = ({navigation}) => {return(CardSet({navigation}))}
+const CardSetTrial = ({navigation, route}) => {
+    const { name } = route.params;
+    return <CardSet navigation={navigation} name={name} />;
+}
 
 const AskAiPage = ({navigation}) => {return(AskAi({navigation}))}
 

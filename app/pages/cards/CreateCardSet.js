@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {View, ScrollView, Text, TextInput, Modal, Pressable, StyleSheet, Dimensions} from 'react-native'
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context'
-import {setItem, getItem} from '../../utils/AsyncStorage'
+import {setItem} from '../../utils/AsyncStorage'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

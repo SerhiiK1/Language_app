@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import {getItem} from '../../utils/AsyncStorage'
 import CreateCardSet from './CreateCardSet';
 
 const Card = ({front, back}) => {
@@ -17,15 +18,16 @@ const Card = ({front, back}) => {
     )
 }
 
-export function CardSet ({navigation}) {
+export function CardSet({navigation, name}) {
    // const [CreateCardVisible, setCreateCardVisible] = React.useState(false) can be changed if needed
-
-    const card = [
-        {front: 'hello', back: 'hola'},
-        {front: 'bye', back: 'adios'},
-        {front: 'thank you', back: 'gracias'},
-        {front: 'beach', back: 'puta'},
-    ]
+    const [card, setCard] = React.useState([])
+    React.useEffect(() => {
+        getItem(name).then((cards) => {
+            cards.map((card) => {
+                setCard([...cards, {front: card.front, back: card.back}])
+            })
+        })
+    }, [])
 
     const [index, setIndex] = React.useState(0)
 
