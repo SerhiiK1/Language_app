@@ -5,22 +5,24 @@ import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const NewCard = ({id}) => {
-    const [front, setFront] = useState('')
-    const [back, setBack] = useState('')
+const NewCard = ({ front, back, visible, setVisible, setFront, setBack}) => {
+
     const [deleteVisible, setDeleteVisible] = useState(false)
-    const [visible, setVisible] = useState(true)
+
     return(
         visible &&
         (<View style = {styles.newCardStyle}>
             <TextInput placeholder='Front' 
                 style={styles.textInputStyle}
-                onChangeText={setFront}/>
+                onChangeText={setFront}
+                value={front}/>
 
 
             <TextInput placeholder='Back' 
                 style={styles.textInputStyle}
-                onChangeText={setBack}/>
+                onChangeText={setBack}
+                value={back}/>
+                
 
             <Pressable style={styles.deleteStyle}
                 onPress={() => {
@@ -28,12 +30,12 @@ const NewCard = ({id}) => {
                 }}>
                 <Text>Delete</Text>
             </Pressable>
-            <DeleteCardModal deleteVisible={deleteVisible} setDeleteVisible={setDeleteVisible} id = {id} setVisible={setVisible}/>
+            <DeleteCardModal deleteVisible={deleteVisible} setDeleteVisible={setDeleteVisible} setVisible={setVisible}/>
         </View>)
     )
 }
 
-const DeleteCardModal = ({deleteVisible, setDeleteVisible, id, setVisible}) => {
+const DeleteCardModal = ({ deleteVisible, setDeleteVisible, setVisible}) => {
     const [hoveredButton, setHoveredButton] = useState(null);
 
     return(
@@ -49,7 +51,7 @@ const DeleteCardModal = ({deleteVisible, setDeleteVisible, id, setVisible}) => {
                         <View style={styles.modalContainer}>
                             <View style={styles.modalView2}>
                                 <View style={styles.modalContent}>
-                                    <Text style={{fontSize: 20, color: 'red'}}>Are you sure you want delete the set?</Text>
+                                    <Text style={{fontSize: 20, color: 'red'}}>Are you sure you want delete the card?</Text>
                                 </View>
                                 <View style = {styles.modalBottom}>
                                     <Pressable 
@@ -64,6 +66,8 @@ const DeleteCardModal = ({deleteVisible, setDeleteVisible, id, setVisible}) => {
                                         onPress={() => {
                                             setDeleteVisible(false)
                                             setVisible(false)
+                                            
+
                                         }}
                                         onMouseEnter={() => setHoveredButton('Delete')}
                                         onMouseLeave={() => setHoveredButton(null)}
@@ -84,6 +88,24 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
     const [cardSet, setCardSet] = useState([])
     const [hoveredButton, setHoveredButton] = useState(null);
     const [id, setId] = useState(0)
+
+    const addCard = () => {
+        setCardSet([...cardSet, {id: id, front: '', back: '', visible: true}])
+        setId(id + 1)
+    }
+
+    const setCardVisibility = (id, visibility) => {
+        setCardSet(cardSet.map((card) => (card.id === id? {...card, visible: visibility} : card)))
+    }
+
+    const setCardFront = (id, front) => {
+        setCardSet(cardSet.map((card) => (card.id === id? {...card, front: front} : card)))
+    }
+
+    const setCardBack = (id, back) => {
+        setCardSet(cardSet.map((card) => (card.id === id? {...card, back: back} : card)))
+    }
+
     return(
         <SafeAreaProvider>
             <SafeAreaView>
@@ -100,7 +122,17 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                             <ScrollView>
                                 <View style = {styles.modalContent}>
                                     <Text>Enter the name of the card set</Text>
-                                    {cardSet.map((card) => card)}
+                                    {cardSet.map((card) => {return(
+                                        <NewCard 
+                                            key = {card.id}
+                                            front = {card.front}
+                                            back = {card.back}
+                                            visible = {card.visible}
+                                            setVisible = {visibility => setCardVisibility(card.id, visibility)}
+                                            setFront = {front => setCardFront(card.id, front)}
+                                            setBack = {back => setCardBack(card.id, back)}
+                                        />)})
+                                    }
                                 </View>
                             </ScrollView>
                             <View style = {styles.modalBottom}>
@@ -113,11 +145,7 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                                             ? styles.hoveredText : null}>Close</Text>
                                 </Pressable>
                                 <Pressable 
-                                    onPress={() => { 
-                                        setCardSet([...cardSet, <NewCard key = {id}/>])
-                                        setId(id + 1)
-
-                                    }}
+                                    onPress={() => {addCard()}}
                                     onMouseEnter={() => setHoveredButton('add')}
                                     onMouseLeave={() => setHoveredButton(null)}
                                     style = {styles.modalContentBottom}>
