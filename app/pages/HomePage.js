@@ -3,6 +3,10 @@ import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from 'react
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import CreateCardSet from './cards/CreateCardSet';
 import {getAllKeys} from '../utils/AsyncStorage';
+import {getAuth, onAuthStateChanged} from 'firebase/auth';
+import {initializeApp} from 'firebase/app';
+import { doc, setDoc, getDoc, initializeFirestore } from "firebase/firestore";
+import {setExperienceData, fetchUserData} from './functions/Experience'
 
 const HomeCardSet = ({navigation, name}) => {
     return (
@@ -17,10 +21,47 @@ const HomeCardSet = ({navigation, name}) => {
     )
 }
 
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAvf-gvB_eXWSYcRytg052UAqQI7XTgBNY",
+    authDomain: "languageapp-5fa29.firebaseapp.com",
+    projectId: "languageapp-5fa29",
+    storageBucket: "languageapp-5fa29.firebasestorage.app",
+    messagingSenderId: "672634105164",
+    appId: "1:672634105164:web:73bf5dbb2a0e1b4ae7f3e9",
+    measurementId: "G-20CR15B4WH"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, {
+    experimentalForceLongPolling: true,
+});
+const auth = getAuth(app);
+
+
+
 export function callHome({navigation}){
     const [CreateCardVisible, setCreateCardVisible] = React.useState(false)
     const [cardSets, setCardSets] = React.useState([])
     const [hasCards, setHasCards] = React.useState(false)
+    const [user, setUser] = React.useState(null);
+    const [userData, setUserData] = React.useState(null);
+
+    React.useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return unsubscribe;
+    }, []);
+
+    React.useEffect(() => {
+        if (user) {
+            fetchUserData(user.uid).then((data) => {
+                setUserData(data);
+            });
+        }
+    }, [user]);
+
     React.useEffect(() => {
         getAllKeys().then((keys) => {
             setCardSets(keys.map((key) => <HomeCardSet key={key} name={key} navigation={navigation}/>))
@@ -30,7 +71,7 @@ export function callHome({navigation}){
     return(
         <SafeAreaProvider>
             <SafeAreaView style={styles.app_view}>
-                <Text style={{color: 'white', fontSize: 30, fontWeight: 'bold', backGroundColor: '#415D43'}} >Experience: </Text>
+                <Text style={{color: 'white', fontSize: 30, fontWeight: 'bold', backGroundColor: '#415D43'}} >Experience: {userData ? userData.experience : 'Loading...'}</Text>
                 <View style={styles.account_button}>
                     <Button
                         title= 'Account'

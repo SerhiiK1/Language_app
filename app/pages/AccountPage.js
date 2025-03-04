@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
-import {getAuth} from 'firebase/auth';
+import {getAuth, onAuthStateChanged} from 'firebase/auth';
 import {initializeApp} from 'firebase/app';
-//import {GetData} from './functions/GetData' can be switched to this function later if needed
+//import {initializeFirestore} from 'firebase/firestore';
+import { setExperienceData, fetchUserData} from './functions/Experience';
 
- 
 const firebaseConfig = {
     apiKey: "AIzaSyAvf-gvB_eXWSYcRytg052UAqQI7XTgBNY",
     authDomain: "languageapp-5fa29.firebaseapp.com",
@@ -20,13 +20,30 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 export function callAccount({navigation}){
-    const user = auth.currentUser;
+    const [user, setUser] = React.useState(null);
+    const [userData, setUserData] = React.useState(null);
 
-    return(
+    React.useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return unsubscribe;
+    }, []);
+
+    React.useEffect(() => {
+        if (user) {
+            fetchUserData(user.uid).then((data) => {
+                setUserData(data);
+            });
+        }
+    }, [user]);
+
+    return(   
         <SafeAreaProvider>
             <SafeAreaView style={styles.app_view}>
                 <Text style={{color: 'white'}}>{user ? user.uid : 'No user signed in'}</Text> 
                 <Text style={{color: 'white', fontSize: 15}}>{user ? user.email : 'No user signed in'}</Text>
+                <Text style={{color: 'white', fontSize: 15}}>{userData ? userData.experience : 'Loading...'}</Text>
                 <View style={styles.account_button}>
                     <Button
                         title= 'Account'
