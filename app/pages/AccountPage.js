@@ -45,6 +45,19 @@ export function callAccount({navigation}){
                 <Text style={{color: 'white'}}>{user ? user.uid : 'No user signed in'}</Text> 
                 <Text style={{color: 'white', fontSize: 15}}>{user ? user.email : 'No user signed in'}</Text>
                 <Text style={{color: 'white', fontSize: 15}}>{userData ? userData.experience : 'Loading...'}</Text>
+                <View style={{height: 40, width: 150}}>
+                    <Button 
+                            title= 'Add experience'
+                            color = '#A1CCA5'
+                            onPress={() => {
+                                const newExperience = userData.experience + 5;
+                                setExperienceData(user.uid, newExperience).then(() => {
+                                    setUserData({...userData, experience: newExperience});
+                                });
+                            }}>     
+                    </Button>
+                </View>
+
                 <View style={styles.account_button}>
                     <Button
                         title= 'Account'
