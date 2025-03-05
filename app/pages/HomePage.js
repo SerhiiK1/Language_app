@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import CreateCardSet from './cards/CreateCardSet';
 import {getItem} from '../utils/AsyncStorage';
@@ -89,14 +89,17 @@ export function callHome({navigation}){
             <SafeAreaView style={styles.app_view}>
                 <Text style={{color: 'white', fontSize: 30, fontWeight: 'bold', backGroundColor: '#415D43'}} >Experience: {userData ? userData.experience : 'Loading...'}</Text>
                 <View style={styles.account_button}>
-                    <Button
-                        title= 'Account'
-                        color= '#415D43'
+                    <TouchableOpacity
+                        style={styles.touchable_button}
                         onPress={() => {
                             navigation.navigate('AccountPage');
                         }}
                     >
-                    </Button>
+                        <Image
+                            source={require('./Assets/Profile.png')}
+                            style={styles.image}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.title_view}>
                     <Text style={styles.title}>Flash Cards</Text>
@@ -110,41 +113,57 @@ export function callHome({navigation}){
 
                 <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
-                    <Button 
-                        title= 'Home'
-                        color = '#A1CCA5'
-                        onPress={() => {
-                            navigation.navigate('HomePage');
-                        }}>     
-                    </Button>
+                        <TouchableOpacity
+                            style={styles.touchable_button}
+                            onPress={() => {
+                                navigation.navigate('HomePage');
+                            }}
+                        >
+                            <Image
+                                source={require('./Assets/Home.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style = {styles.button}>
-                        <Button 
-                            title= 'Leaderboard'
-                            color = '#A1CCA5'
+                        <TouchableOpacity
+                            style={styles.touchable_button}
                             onPress={() => {
                                 navigation.navigate('Leaderboard');
-                            }}> 
-                        </Button>
+                            }}
+                        >
+                            <Image
+                                source={require('./Assets/Leaderboard.svg')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style = {styles.button}> 
-                        <Button 
-                            title= 'Add more flash cards'
-                            color = '#A1CCA5'
+                        <TouchableOpacity
+                            style={styles.touchable_button}
                             onPress={() => {
                                 setCreateCardVisible(true);
-                            }}>     
-                        </Button>
+                            }}
+                        >
+                            <Image
+                                source={require('./Assets/FlashCards.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style = {styles.button}> 
-                        <Button 
-                            title= 'Settings'
-                            color = '#A1CCA5'
-                            onPress={() => {
-                                navigation.navigate('SettingsPage');
-                            }}>     
-                        </Button>
-                    </View> 
+                        <TouchableOpacity
+                        style={styles.touchable_button}
+                        onPress={() => {
+                            navigation.navigate('SettingsPage');
+                        }}
+                    >
+                        <Image
+                            source={require('./Assets/Settings.png')}
+                            style={styles.image}
+                        />
+                    </TouchableOpacity>
+                    </View>
                     <CreateCardSet navigation={navigation} 
                         visible={CreateCardVisible} 
                         setVisible={setCreateCardVisible}
@@ -218,4 +237,17 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         flexDirection: 'row',
     },
+    image: {
+        width: 40,
+        height: 40,
+        alignSelf: 'center',
+        alignContent: 'center',
+    },
+    touchable_button: {
+        backgroundColor: '#A1CCA5',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+    }
 });
