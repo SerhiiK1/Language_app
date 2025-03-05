@@ -45,18 +45,6 @@ export function callAccount({navigation}){
                 <Text style={{color: 'white', fontSize: 20}}>Email: {user ? user.email : 'No user signed in'}</Text>
                 <Text style={{color: 'white', fontSize: 20}}>Experience: {userData ? userData.experience : 'Loading...'}</Text>
 
-                {/**
-                <View style={styles.account_button}>
-                    <Button
-                        title= 'Account'
-                        color= '#415D43'
-                        onPress={() => {
-                            navigation.navigate('AccountPage');
-                        }}
-                    >
-                    </Button>
-                </View>
-                */}
                 <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
                     <Button 
