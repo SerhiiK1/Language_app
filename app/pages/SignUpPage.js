@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import {signUp} from './functions/SignUp';
+import {setExperienceData} from './functions/Experience';
 
 export function callSignUp({navigation}){
     const [user, setUser]  = React.useState('');
@@ -43,6 +44,7 @@ export function callSignUp({navigation}){
                             .then((error) => {
                                 if (!error) {
                                     setValid(true)
+                                    setExperienceData(user.uid, 0)
                                     navigation.navigate('HomePage')
                                 } else {
                                     if (user.length === 0 || !(user.includes('@'))) {

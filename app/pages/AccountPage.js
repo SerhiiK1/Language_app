@@ -3,7 +3,6 @@ import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import {getAuth, onAuthStateChanged} from 'firebase/auth';
 import {initializeApp} from 'firebase/app';
-//import {initializeFirestore} from 'firebase/firestore';
 import { setExperienceData, fetchUserData} from './functions/Experience';
 
 const firebaseConfig = {
@@ -34,7 +33,6 @@ export function callAccount({navigation}){
         if (user) {
             fetchUserData(user.uid).then((data) => {
                 setUserData(data);
-                setExperienceData(user.uid, 0)
             });
         }
     }, [user]);
@@ -45,18 +43,6 @@ export function callAccount({navigation}){
                 <Text style={{color: 'white'}}>{user ? user.uid : 'No user signed in'}</Text> 
                 <Text style={{color: 'white', fontSize: 15}}>{user ? user.email : 'No user signed in'}</Text>
                 <Text style={{color: 'white', fontSize: 15}}>{userData ? userData.experience : 'Loading...'}</Text>
-                <View style={{height: 40, width: 150}}>
-                    <Button 
-                            title= 'Add experience'
-                            color = '#A1CCA5'
-                            onPress={() => {
-                                const newExperience = userData.experience + 5;
-                                setExperienceData(user.uid, newExperience).then(() => {
-                                    setUserData({...userData, experience: newExperience});
-                                });
-                            }}>     
-                    </Button>
-                </View>
 
                 <View style={styles.account_button}>
                     <Button
@@ -68,7 +54,7 @@ export function callAccount({navigation}){
                     >
                     </Button>
                 </View>
-                <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
+                <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
                     <Button 
                         title= 'Home'
@@ -128,6 +114,13 @@ const styles = StyleSheet.create({
     button_text: {
         fontSize: 15,
         color: 'black',
+    },
+    bottom_buttons:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        width: '100%',     
+        flex: 1,
     },
     app_view: {
         backgroundColor: '#111D13',
