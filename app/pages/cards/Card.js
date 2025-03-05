@@ -51,14 +51,19 @@ export function CardSet({navigation, uid, name}) {
 
     React.useEffect(() => {
         getItem(uid).then((cardSets) => {
-            cardSets.map((cardInfo) => {
-                if (cardInfo.name === name) {
-                    (cardInfo.cards).map((cards) => {
-                        setCard([...card, {front: cards.front, back: cards.back}])
-                    })
+            cardSets.map((cardSetInfo) => {
+                if (cardSetInfo.name === name) {
+                    console.log(cardSetInfo.cards)
+                    setCard(prevCard => [
+                        ...prevCard,    
+                        ...cardSetInfo.cards.map(cardInfo => (
+                            {front: cardInfo.front, back: cardInfo.back}
+                        ))
+                    ]);
                 }
             })
         })
+        console.log(card)
     }, [])
     
     React.useEffect(() => {
@@ -77,28 +82,35 @@ export function CardSet({navigation, uid, name}) {
         }
     }, [user]);
 
-    const increment = () => {
-        let localIndex = index + 1
-        
-        if (localIndex <= card.length - 1){
-            setBackDisable(false)
-            if (localIndex == card.length - 2) {
-                setFrontDisable(true)
-            }
-            setIndex(localIndex)
+    React.useEffect(() => {
+        if (index === 0) {
+            setBackDisable(true)
         }
+        else {
+            setBackDisable(false)
+        }
+        if (index === card.length - 1) {
+            setFrontDisable(true)
+        }
+        else {
+            setFrontDisable(false)
+        }
+    }, [index])
+
+    const finishCard = ({front, back}) => {
+        setCard((prevCard) => prevCard.filter((info) => info.front !== front && info.back !== back));
+        if (index >= card.length - 1) {
+            setIndex(card.length - 2);
+        }
+    }
+
+    const increment = () => {
+        setIndex(index + 1)
 
     }
 
     const decrement = () => {
-        let localIndex = index -1
-        if (localIndex >= 0){
-            setFrontDisable(false)
-            if (localIndex == 0) {
-                setBackDisable(true)
-            }
-            setIndex(localIndex)
-        }
+        setIndex(index-1)
     }
 
    
@@ -130,7 +142,15 @@ export function CardSet({navigation, uid, name}) {
                     onPress={() => {
                         if (inputText === card[index].back) {
                             setExperienceData(user.uid, userData.experience + 5);
-                            increment();
+                            alert('Correct')
+                        
+                            // User got last card right 
+                            // TODO: fix to make sure user knows they finished the deck
+                            if (card.length === 1) {
+                                navigation.navigate('HomePage')
+                            }
+                            finishCard({front: card[index].front, back: card[index].back}) // Pops current card out of deck
+
                         } else {
                             alert('Incorrect, try again.');
                         }
@@ -143,7 +163,7 @@ export function CardSet({navigation, uid, name}) {
                         navigation.navigate('HomePage');
                     }}
                     >
-                    <Text style={{color: 'white'}}>Create more flash cards</Text>
+                    <Text style={{color: 'white'}}>Back</Text>
                 </TouchableOpacity>
             </SafeAreaView>
 
