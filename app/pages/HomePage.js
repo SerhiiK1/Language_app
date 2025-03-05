@@ -2,24 +2,11 @@ import React from 'react';
 import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import CreateCardSet from './cards/CreateCardSet';
-import {getAllKeys} from '../utils/AsyncStorage';
+import {getItem} from '../utils/AsyncStorage';
 import {getAuth, onAuthStateChanged} from 'firebase/auth';
 import {initializeApp} from 'firebase/app';
 import { doc, setDoc, getDoc, initializeFirestore } from "firebase/firestore";
 import {setExperienceData, fetchUserData} from './functions/Experience'
-
-const HomeCardSet = ({navigation, name}) => {
-    return (
-        <TouchableOpacity
-            onPress={() => {
-                navigation.navigate('CardSet', {name});
-            }}
-            style={styles.card}
-        >
-            <Text style={{color: 'white', fontSize: 20}}>{`Name: ${name}`}</Text>
-        </TouchableOpacity>
-    )
-}
 
 
 const firebaseConfig = {
@@ -33,11 +20,20 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = initializeFirestore(app, {
-    experimentalForceLongPolling: true,
-});
 const auth = getAuth(app);
 
+const HomeCardSet = ({navigation, name, uid}) => {
+    return (
+        <TouchableOpacity
+            onPress={() => {
+                navigation.navigate('CardSet', {name, uid});
+            }}
+            style={styles.card}
+        >
+            <Text style={{color: 'white', fontSize: 20}}>{`Name: ${name}`}</Text>
+        </TouchableOpacity>
+    )
+}
 
 
 export function callHome({navigation}){
@@ -55,20 +51,40 @@ export function callHome({navigation}){
     }, []);
 
     React.useEffect(() => {
+        
         if (user) {
             fetchUserData(user.uid).then((data) => {
                 setUserData(data);
-                setExperienceData(user.uid, 0);
             });
         }
     }, [user]);
-
     React.useEffect(() => {
-        getAllKeys().then((keys) => {
-            setCardSets(keys.map((key) => <HomeCardSet key={key} name={key} navigation={navigation}/>))
-            setHasCards(keys.length > 0)
-        })
-    }, [])
+        if (user) {
+            getItem(user.uid)
+            .then((cardSetsFile) => {
+                if (!cardSetsFile) {
+                    setHasCards(false);
+                }
+                else {
+                    setCardSets(prevCardSets => [
+                        ...prevCardSets, 
+                        ...cardSetsFile.map(cardInfo => (
+                            setHasCards(true),
+                            <HomeCardSet 
+                                key={cardInfo.name}
+                                uid = {user.uid} 
+                                navigation={navigation} 
+                                name={cardInfo.name} 
+                            />
+                        ))
+                    ]);
+                }
+                
+            });
+
+        }
+    }, [user]);
+
     return(
         <SafeAreaProvider>
             <SafeAreaView style={styles.app_view}>
@@ -118,7 +134,6 @@ export function callHome({navigation}){
                             color = '#A1CCA5'
                             onPress={() => {
                                 setCreateCardVisible(true);
-                                
                             }}>     
                         </Button>
                     </View>
@@ -134,6 +149,7 @@ export function callHome({navigation}){
                     <CreateCardSet navigation={navigation} 
                         visible={CreateCardVisible} 
                         setVisible={setCreateCardVisible}
+                        uid = {user ? user.uid : null}
                     />
                 </View>
             </SafeAreaView>

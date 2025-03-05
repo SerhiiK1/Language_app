@@ -18,7 +18,7 @@ const Card = ({front, back}) => {
     )
 }
 
-export function CardSet({navigation, name}) {
+export function CardSet({navigation, uid, name}) {
    // const [CreateCardVisible, setCreateCardVisible] = React.useState(false) can be changed if needed
     const [card, setCard] = React.useState([])
     const [index, setIndex] = React.useState(0)
@@ -27,10 +27,13 @@ export function CardSet({navigation, name}) {
     const [backDisable, setBackDisable] = React.useState(true)
 
     React.useEffect(() => {
-
-        getItem(name).then((cards) => {
-            cards.map((card) => {
-                setCard([...cards, {front: card.front, back: card.back}])
+        getItem(uid).then((cardSets) => {
+            cardSets.map((cardInfo) => {
+                if (cardInfo.name === name) {
+                    (cardInfo.cards).map((cards) => {
+                        setCard([...card, {front: cards.front, back: cards.back}])
+                    })
+                }
             })
         })
     }, [])

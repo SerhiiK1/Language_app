@@ -1,5 +1,6 @@
 import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
 import {initializeApp} from 'firebase/app';
+import { setExperienceData } from './Experience';
 
 
 const firebaseConfig = {
@@ -22,6 +23,7 @@ export async function signUp(email, pw){
 
     try {
         await createUserWithEmailAndPassword(auth, email, pw)
+        setExperienceData(auth.currentUser.uid, 0)
         return false;
     } catch(error) {
         return true;

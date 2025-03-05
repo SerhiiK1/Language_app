@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {View, ScrollView, Text, TextInput, Modal, Pressable, StyleSheet, Dimensions} from 'react-native'
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context'
-import {setItem} from '../../utils/AsyncStorage'
+import {getItem, mergeItem, setItem} from '../../utils/AsyncStorage'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -137,7 +137,7 @@ const CloseCreateCardModal = ({closeVisible, setCloseVisible, setVisible,visible
         </SafeAreaProvider>
     )
 }
-const CreateCardSet = ({navigation, visible, setVisible}) => {
+const CreateCardSet = ({navigation, visible, setVisible, uid}) => {
     const [name, setName] = useState('')
     const [cardSet, setCardSet] = useState([])
     const [hoveredButton, setHoveredButton] = useState(null);
@@ -166,8 +166,7 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
     async function saveCardSet () {
         let errorMessage = '';
         let canSave = true;
-        let localId = 0;
-        const outCard = [];
+        const outCard = {name: name, cards: []};
         if (name === '') {
             canSave = false;
             errorMessage = 'Name of set must be filled'
@@ -177,8 +176,7 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                 if (card.visible){
                     if (card.front !== '' && card.back !== '') {
                     
-                        outCard.push({id: localId, front: card.front, back: card.back});
-                        localId += 1;
+                        outCard.cards.push({front: card.front, back: card.back});
                     
                     } else {
                         canSave = false;
@@ -187,16 +185,33 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                 }
             });
         }
-        setLetSave(canSave);
-        setErrorMsg(errorMessage);
+
         try {
+            const existingData = await getItem(uid);
+            const newData = [];
+            if (existingData) {
+                existingData.forEach((data) => {
+                    if (data.name !== name) {
+                        newData.push(data);
+                    }
+                    else {
+                        canSave = false;
+                        setErrorMsg('Name already exists');
+                    }
+                });
+            }
+            setLetSave(canSave);
+
             if (canSave) {
-                await setItem(name, outCard);
-                navigation.navigate('CardSet', { name });
-                setVisible(!visible);
+                newData.push(outCard);
+                setItem(uid, newData)
+                .then(() => {
+                    navigation.navigate('CardSet', { uid , name});
+                    setVisible(!visible);
+                })
             }
         } catch (e) {
-            console.log('Error saving');
+            console.log('Error saving ' + e);
         }
     }
 
@@ -244,11 +259,7 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                                     <Pressable 
                                         onPress={() => {
                                             setCloseVisible(true)
-                                            // setVisible(!visible)
-                                            // setCardSet([])
-                                            //setName('')
-                                            //setId(0)
-                                            // setErrorMsg('')
+
                                         }}
                                         onMouseEnter={() => setHoveredButton('close')}
                                         onMouseLeave={() => setHoveredButton(null)}
@@ -267,7 +278,7 @@ const CreateCardSet = ({navigation, visible, setVisible}) => {
                                     <Pressable 
                                         onPress={() => {
                                             saveCardSet();
-                                                                                    }}
+                                        }}
                                         onMouseEnter={() => setHoveredButton('create')}
                                         onMouseLeave={() => setHoveredButton(null)}
                                         style = {styles.modalContentBottom}>
