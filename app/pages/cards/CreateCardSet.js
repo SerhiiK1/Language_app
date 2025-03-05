@@ -1,36 +1,46 @@
 import React, { useState } from 'react';
 import {View, ScrollView, Text, TextInput, Modal, Pressable, StyleSheet, Dimensions} from 'react-native'
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context'
-import {getItem, mergeItem, setItem} from '../../utils/AsyncStorage'
+import {getItem, setItem} from '../../utils/AsyncStorage'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const NewCard = ({ front, back, visible, setVisible, setFront, setBack}) => {
+const NewCard = ({ front, back, visible, setVisible, setFront, setBack, edit}) => {
 
     const [deleteVisible, setDeleteVisible] = useState(false)
 
     return(
         visible &&
-        (<View style = {styles.newCardStyle}>
-            <TextInput placeholder='Front' 
-                style={styles.textInputStyle}
-                onChangeText={setFront}
-                value={front}/>
-
-
-            <TextInput placeholder='Back' 
-                style={styles.textInputStyle}
-                onChangeText={setBack}
-                value={back}/>
+        (<View style = {styles.newCardContainer}>
+            <View style = {styles.newCardView}>
+                <Text>Front</Text>
+                <TextInput placeholder='Front' 
+                    style={styles.textInputStyle}
+                    onChangeText={setFront}
+                    value={front}
+                    editable = {edit}/>
                 
+            </View>
+            <View style = {styles.newCardView}>
+                <Text>Back</Text>
 
-            <Pressable style={styles.deleteStyle}
-                onPress={() => {
-                    setDeleteVisible(true);
-                }}>
-                <Text>Delete</Text>
-            </Pressable>
+
+                <TextInput placeholder='Back' 
+                    style={styles.textInputStyle}
+                    onChangeText={setBack}
+                    value={back}
+                    editable = {edit}/>
+                    
+
+                {edit &&
+                    <Pressable style={styles.deleteStyle}
+                    onPress={() => {
+                        setDeleteVisible(true);
+                    }}>
+                    <Text>Delete</Text>
+                </Pressable>}
+            </View>
             <DeleteCardModal deleteVisible={deleteVisible} setDeleteVisible={setDeleteVisible} setVisible={setVisible}/>
         </View>)
     )
@@ -137,8 +147,8 @@ const CloseCreateCardModal = ({closeVisible, setCloseVisible, setVisible,visible
         </SafeAreaProvider>
     )
 }
-const CreateCardSet = ({navigation, visible, setVisible, uid}) => {
-    const [name, setName] = useState('')
+const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, editName}) => {
+    const [name, setName] = useState(editName); // Initialize name with editName if provided
     const [cardSet, setCardSet] = useState([])
     const [hoveredButton, setHoveredButton] = useState(null);
     const [id, setId] = useState(0)
@@ -204,20 +214,39 @@ const CreateCardSet = ({navigation, visible, setVisible, uid}) => {
 
             if (canSave) {
                 newData.push(outCard);
-                setItem(uid, newData)
-                .then(() => {
-                    navigation.navigate('CardSet', { uid , name});
-                    setVisible(!visible);
-                })
+                await setItem(uid, newData);
+                navigation.navigate('CardSet', { uid , name});
+                setVisible(!visible);
             }
         } catch (e) {
             console.log('Error saving ' + e);
         }
     }
 
+    React.useEffect(() => {
+        if (!edit) {
+            setName(editName)
+            getItem(uid).then((cardSets) => {
+                if (cardSets) {
+                    let localId = 0;
+                    const updatedCardSet = cardSets.flatMap((cardSetInfo) => {
+                        if (cardSetInfo.name === editName) {
+                            return cardSetInfo.cards.map(cardInfo => (
+                                {id: localId++, front: cardInfo.front, back: cardInfo.back, visible: true}
+                            ));
+                        }
+                        return [];
+                    });
+                    setCardSet(updatedCardSet);
+                    setId(localId);
+                }
+            });
+        }
+    }, [visible]);
+
     return(
         <SafeAreaProvider>
-            <SafeAreaView>
+            <SafeAreaView style={styles.container}>
                 <Modal
                     animationType='none'
                     transparent = {true}
@@ -230,11 +259,13 @@ const CreateCardSet = ({navigation, visible, setVisible, uid}) => {
                         <View style = {styles.modalView}>
                             <ScrollView>
                                 <View style = {styles.modalTitle}>
-                                    <Text style={styles.title}>Create a card set</Text>
-                                    <TextInput placeholder='Card Set Name'
+                                    {!edit &&
+                                    <Text>{`Name: ${editName}`}</Text>}
+                                    
+                                    {edit && <TextInput placeholder='Name'
                                         style={styles.textInputStyle}
                                         onChangeText={setName}
-                                        value={name}/>
+                                        value={editName}/>}
                                 </View>
                                 <View style = {styles.modalContent}>
                                     {cardSet.map((card) => {return(
@@ -246,6 +277,7 @@ const CreateCardSet = ({navigation, visible, setVisible, uid}) => {
                                             setVisible = {visibility => setCardVisibility(card.id, visibility)}
                                             setFront = {front => setCardFront(card.id, front)}
                                             setBack = {back => setCardBack(card.id, back)}
+                                            edit = {edit}
                                         />)})
                                     }
                                 </View>
@@ -258,8 +290,17 @@ const CreateCardSet = ({navigation, visible, setVisible, uid}) => {
                                 <View style = {styles.modalButtonBottom}>
                                     <Pressable 
                                         onPress={() => {
-                                            setCloseVisible(true)
+                                            if (edit){
+                                                setCloseVisible(true)
 
+                                            }
+                                            else {
+                                                setVisible(!visible)
+                                                setCardSet([])
+                                                setName('')
+                                                setId(0)
+                                                setErrorMsg('')
+                                            }
                                         }}
                                         onMouseEnter={() => setHoveredButton('close')}
                                         onMouseLeave={() => setHoveredButton(null)}
@@ -267,14 +308,15 @@ const CreateCardSet = ({navigation, visible, setVisible, uid}) => {
                                             <Text style={hoveredButton === 'close' 
                                                 ? styles.hoveredText : null}>Close</Text>
                                     </Pressable>
-                                    <Pressable 
+                                    {edit &&
+                                        <Pressable 
                                         onPress={() => {addCard()}}
                                         onMouseEnter={() => setHoveredButton('add')}
                                         onMouseLeave={() => setHoveredButton(null)}
                                         style = {styles.modalContentBottom}>
                                             <Text style={hoveredButton === 'add' 
                                                 ? styles.hoveredText : null}>+</Text>
-                                    </Pressable>
+                                        </Pressable>}
                                     <Pressable 
                                         onPress={() => {
                                             saveCardSet();
@@ -305,14 +347,18 @@ const CreateCardSet = ({navigation, visible, setVisible, uid}) => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     modalView:{
         alignItems: 'center',
-        height: windowHeight * 0.6,
+        justifyContent: 'center',
+        height: windowHeight * 0.7,
         width: windowWidth * 0.8,
         padding: 30,
         backgroundColor: 'white',
         shadowColor: 'black',
-        shadowRadius: 1000,
+        shadowRadius: 100,
         shadowOpacity: 1,
         elevation: 5,
         borderRadius: 20,
@@ -326,6 +372,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        width: '100%',
     },
     modalBottom:{
         padding: 10,
@@ -346,33 +393,37 @@ const styles = StyleSheet.create({
     hoveredText: {
         textDecorationLine: 'underline',
     },
-    newCardStyle:{
-        height: 100,
-        width: windowWidth * 0.7,
+    newCardContainer:{
+        flex: 1,
+        margin: 10,
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        backgroundColor: 'grey',
-        borderRadius: 3,
-        margin: 5,
+        width: '100%',
+    },
+    newCardView: {
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        flexDirection: 'column',
+        width: '50%',
     },
     textInputStyle: {
-        width: '90%', // Make the text input take the full width
+        width: windowWidth *0.3 , // Make the text input take the full width
         margin: 10, // Add some space between the inputs
         padding: 10, // Add padding inside the input
-        backgroundColor: 'grey', // Set background color to white
-        borderRadius: 5, // Add border radius for better appearance
+        backgroundColor: 'grey', 
+        borderRadius: 5, 
     },
     deleteStyle: {
         backgroundColor: 'red',
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
-        width:60
+        width: 60
     },
     modalView2:{
         alignItems: 'center',
+        justifyContent: 'center',
         height: windowHeight * 0.4,
-        width: windowWidth * 0.6,
+        width: windowWidth * 0.8,
         padding: 30,
         backgroundColor: 'white',
         shadowColor: 'black',
@@ -382,16 +433,15 @@ const styles = StyleSheet.create({
         borderRadius: 20   
     },
     modalTitle:{
-        width: windowWidth * 0.7,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        
+        width: '100%',
+        justifyContent: 'flex-start',
+        alignItems: 'center',      
     },
     title:{
         fontSize: 20,
         fontWeight: 'bold',
         width: '100%',
-        padding:10,
+        padding: 10,
     },
     error_message:{
         color: 'red',

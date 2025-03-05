@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, Button, Modal, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import CreateCardSet from './cards/CreateCardSet';
 import {getItem} from '../utils/AsyncStorage';
@@ -22,11 +22,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const HomeCardSet = ({navigation, name, uid}) => {
+const HomeCardSet = ({navigation, name, uid, setCreateCardVisible, setEdit, setEditName}) => {
     return (
         <TouchableOpacity
             onPress={() => {
-                navigation.navigate('CardSet', {name, uid});
+                setCreateCardVisible(true)
+                setEdit(false)
+                setEditName(name)
             }}
             style={styles.card}
         >
@@ -38,6 +40,9 @@ const HomeCardSet = ({navigation, name, uid}) => {
 
 export function callHome({navigation}){
     const [CreateCardVisible, setCreateCardVisible] = React.useState(false)
+    const [cards, setCards] = React.useState([])
+    const [edit, setEdit] = React.useState(false)
+    const [editName, setEditName] = React.useState('')
     const [cardSets, setCardSets] = React.useState([])
     const [hasCards, setHasCards] = React.useState(false)
     const [user, setUser] = React.useState(null);
@@ -75,11 +80,13 @@ export function callHome({navigation}){
                                 uid = {user.uid} 
                                 navigation={navigation} 
                                 name={cardInfo.name} 
+                                setCreateCardVisible={setCreateCardVisible}
+                                setEdit={setEdit}
+                                setEditName = {setEditName}
                             />
                         ))
                     ]);
                 }
-                
             });
 
         }
@@ -134,6 +141,8 @@ export function callHome({navigation}){
                             color = '#A1CCA5'
                             onPress={() => {
                                 setCreateCardVisible(true);
+                                setEdit(true)
+                                setEditName('')
                             }}>     
                         </Button>
                     </View>
@@ -146,10 +155,14 @@ export function callHome({navigation}){
                             }}>     
                         </Button>
                     </View> 
-                    <CreateCardSet navigation={navigation} 
+                    <CreateCardSet 
+                        navigation={navigation} 
                         visible={CreateCardVisible} 
                         setVisible={setCreateCardVisible}
-                        uid = {user ? user.uid : null}
+                        uid={user ? user.uid : null}
+                        edit={edit}
+                        setEdit = {setEdit}
+                        editName={editName} // Pass editName as a prop
                     />
                 </View>
             </SafeAreaView>
