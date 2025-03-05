@@ -8,6 +8,7 @@ export function callSignIn({navigation}){
     const [pw, setPw]  = React.useState('');
     const [valid, setValid] = React.useState(true)
     const [errorMsg, setErrorMsg] = React.useState('')
+    const [showPassword, setShowPassword] = React.useState(false);
     return (
         <SafeAreaProvider>
             <SafeAreaView style = {styles.app_view}>
@@ -21,12 +22,20 @@ export function callSignIn({navigation}){
                         onChangeText={setUser}
                         placeholder='Email'
                     />
-                    <TextInput
-                        style = {styles.input}
-                        color = '#A1CCA5'
-                        onChangeText={setPw}
-                        placeholder='Password'
-                    />
+                    <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+                        <TextInput
+                            style = {[styles.input, {flex: 1}]}
+                            color = '#A1CCA5'
+                            onChangeText={setPw}
+                            placeholder='Password'
+                            secureTextEntry={!showPassword}
+                        />
+                        <Button
+                            title={showPassword ? 'Hide' : 'Show'}
+                            color='#A1CCA5'
+                            onPress={() => setShowPassword(!showPassword)}
+                        />
+                    </View>
                     <Text
                         visibility = {valid}
                         style = {styles.error_msg}

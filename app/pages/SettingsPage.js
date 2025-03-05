@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, TextInput, StyleSheet} from 'react-native';
+import {View, Text, Button, TextInput, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 export function callSettings({navigation}){
@@ -8,53 +8,73 @@ export function callSettings({navigation}){
             <SafeAreaView style={styles.app_view}>
                 <Text style={{color: 'white'}}>Settings</Text> 
                 <View style={styles.account_button}>
-                    <Button
-                        title= 'Account'
-                        color= '#415D43'
+                    <TouchableOpacity
+                        style={styles.touchable_button}
                         onPress={() => {
                             navigation.navigate('AccountPage');
                         }}
                     >
-                    </Button>
+                        <Image
+                            source={require('./Assets/Profile.png')}
+                            style={styles.image}
+                        />
+                    </TouchableOpacity>
                 </View>
-                <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
+                <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
-                    <Button 
-                        title= 'Home'
-                        color = '#A1CCA5'
-                        onPress={() => {
-                            navigation.navigate('HomePage');
-                        }}>     
-                    </Button>
-                    </View>
-                    <View style = {styles.button}>
-                        <Button 
-                            title= 'Leaderboard'
-                            color = '#A1CCA5'
-                            onPress={() => {
-                                navigation.navigate('Leaderboard');
-                            }}> 
-                        </Button>
-                    </View>
-                    <View style = {styles.button}> 
-                        <Button 
-                            title= 'Add more flash cards'
-                            color = '#A1CCA5'
+                        <TouchableOpacity
+                            style={styles.touchable_button}
                             onPress={() => {
                                 navigation.navigate('HomePage');
-                            }}>     
-                        </Button>
+                            }}
+                        >
+                            <Image
+                                source={require('./Assets/Home.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style = {styles.button}>
+                        <TouchableOpacity
+                            style={styles.touchable_button}
+                            onPress={() => {
+                                navigation.navigate('Leaderboard');
+                            }}
+                        >
+                            <Image
+                                source={require('./Assets/Leaderboard.svg')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style = {styles.button}> 
+                        <TouchableOpacity
+                            style={styles.touchable_button}
+                            onPress={() => {
+                                navigation.navigate('HomePage');
+                            }}
+                        >
+                            <Image
+                                source={require('./Assets/FlashCards.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
                     </View> 
                     <View style = {styles.button}> 
-                        <Button 
-                            title= 'Settings'
-                            color = '#A1CCA5'
+                        <TouchableOpacity
+                            style={styles.touchable_button}
                             onPress={() => {
                                 navigation.navigate('SettingsPage');
-                            }}>     
-                        </Button>
-                    </View> 
+                            }}
+                            >
+                            <Image
+                                source={require('./Assets/Settings.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View> 
+                {/** needs to be moved later
                 <View style={styles.button}>
                     <Button
                         title= 'AI'
@@ -64,6 +84,7 @@ export function callSettings({navigation}){
                         }}>
                     </Button>
                 </View>
+                */}
             </SafeAreaView>
         </SafeAreaProvider>
     );
@@ -73,6 +94,13 @@ const styles = StyleSheet.create({
     button: {
         width: '25%', 
         height: '10%',
+    },
+    bottom_buttons:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        width: '100%',     
+        flex: 1,
     },
     account_button: {
         backgroundColor: '#415D43',
@@ -91,5 +119,18 @@ const styles = StyleSheet.create({
         flex: 1,
         width: null,
         height: null,
+    },
+    image: {
+        width: 40,
+        height: 40,
+        alignSelf: 'center',
+        alignContent: 'center',
+    },
+    touchable_button: {
+        backgroundColor: '#A1CCA5',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
     }
 });

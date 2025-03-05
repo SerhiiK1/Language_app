@@ -1,11 +1,10 @@
 import React from 'react';
-import {View, Text, Button, Modal, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import CreateCardSet from './cards/CreateCardSet';
 import {getItem} from '../utils/AsyncStorage';
 import {getAuth, onAuthStateChanged} from 'firebase/auth';
 import {initializeApp} from 'firebase/app';
-import { doc, setDoc, getDoc, initializeFirestore } from "firebase/firestore";
 import {setExperienceData, fetchUserData} from './functions/Experience'
 
 
@@ -97,14 +96,17 @@ export function callHome({navigation}){
             <SafeAreaView style={styles.app_view}>
                 <Text style={{color: 'white', fontSize: 30, fontWeight: 'bold', backGroundColor: '#415D43'}} >Experience: {userData ? userData.experience : 'Loading...'}</Text>
                 <View style={styles.account_button}>
-                    <Button
-                        title= 'Account'
-                        color= '#415D43'
+                    <TouchableOpacity
+                        style={styles.touchable_button}
                         onPress={() => {
                             navigation.navigate('AccountPage');
                         }}
                     >
-                    </Button>
+                        <Image
+                            source={require('./Assets/Profile.png')}
+                            style={styles.image}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.title_view}>
                     <Text style={styles.title}>Flash Cards</Text>
@@ -118,45 +120,58 @@ export function callHome({navigation}){
 
                 <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
-                    <Button 
-                        title= 'Home'
-                        color = '#A1CCA5'
-                        onPress={() => {
-                            navigation.navigate('HomePage');
-                        }}>     
-                    </Button>
+                        <TouchableOpacity
+                            style={styles.touchable_button}
+                            onPress={() => {
+                                navigation.navigate('HomePage');
+                            }}
+                        >
+                            <Image
+                                source={require('./Assets/Home.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style = {styles.button}>
-                        <Button 
-                            title= 'Leaderboard'
-                            color = '#A1CCA5'
+                        <TouchableOpacity
+                            style={styles.touchable_button}
                             onPress={() => {
                                 navigation.navigate('Leaderboard');
-                            }}> 
-                        </Button>
+                            }}
+                        >
+                            <Image
+                                source={require('./Assets/Leaderboard.svg')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style = {styles.button}> 
-                        <Button 
-                            title= 'Add more flash cards'
-                            color = '#A1CCA5'
+                        <TouchableOpacity
+                            style={styles.touchable_button}
                             onPress={() => {
                                 setCreateCardVisible(true);
                                 setEdit(true)
                                 setEditName('')
-                            }}>     
-                        </Button>
+                            }}>   
+                            <Image
+                                source={require('./Assets/FlashCards.png')}
+                                style={styles.image}
+                            />  
+                        </TouchableOpacity>
                     </View>
                     <View style = {styles.button}> 
-                        <Button 
-                            title= 'Settings'
-                            color = '#A1CCA5'
+                        <TouchableOpacity 
+                            style={styles.touchable_button}
                             onPress={() => {
                                 navigation.navigate('SettingsPage');
                             }}>     
-                        </Button>
+                            <Image
+                                source={require('./Assets/Settings.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
                     </View> 
-                    <CreateCardSet 
-                        navigation={navigation} 
+                    <CreateCardSet navigation={navigation} 
                         visible={CreateCardVisible} 
                         setVisible={setCreateCardVisible}
                         uid={user ? user.uid : null}
@@ -193,10 +208,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'flex-end',
-        width: '100%',
-
-
-        
+        width: '100%',    
         flex: 1,
     },
     app_view: {
@@ -235,4 +247,17 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         flexDirection: 'row',
     },
+    image: {
+        width: 40,
+        height: 40,
+        alignSelf: 'center',
+        alignContent: 'center',
+    },
+    touchable_button: {
+        backgroundColor: '#A1CCA5',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+    }
 });
