@@ -40,10 +40,12 @@ export function callAccount({navigation}){
     return(   
         <SafeAreaProvider>
             <SafeAreaView style={styles.app_view}>
-                <Text style={{color: 'white'}}>{user ? user.uid : 'No user signed in'}</Text> 
-                <Text style={{color: 'white', fontSize: 15}}>{user ? user.email : 'No user signed in'}</Text>
-                <Text style={{color: 'white', fontSize: 15}}>{userData ? userData.experience : 'Loading...'}</Text>
+                <Text style={{color: 'white', fontSize: 30}}>User Information:</Text> 
+                <Text style={{color: 'white', fontSize: 20}}>Uesr id: {user ? user.uid : 'No user signed in'}</Text> 
+                <Text style={{color: 'white', fontSize: 20}}>Email: {user ? user.email : 'No user signed in'}</Text>
+                <Text style={{color: 'white', fontSize: 20}}>Experience: {userData ? userData.experience : 'Loading...'}</Text>
 
+                {/**
                 <View style={styles.account_button}>
                     <Button
                         title= 'Account'
@@ -54,6 +56,7 @@ export function callAccount({navigation}){
                     >
                     </Button>
                 </View>
+                */}
                 <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
                     <Button 
