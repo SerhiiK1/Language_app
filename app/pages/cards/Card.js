@@ -63,7 +63,6 @@ export function CardSet({navigation, uid, name}) {
                 }
             })
         })
-        console.log(card)
     }, [])
     
     React.useEffect(() => {
