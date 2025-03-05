@@ -147,12 +147,16 @@ export function CardSet({navigation, uid, name}) {
                             // User got last card right 
                             // TODO: fix to make sure user knows they finished the deck
                             if (card.length === 1) {
+                                alert('You have finished the deck!')
                                 navigation.navigate('HomePage')
                             }
                             finishCard({front: card[index].front, back: card[index].back}) // Pops current card out of deck
 
                         } else {
                             alert('Incorrect, try again.');
+                        }
+                        if (index === card.length - 2) {
+                            setFrontDisable(true)
                         }
                     }}
                 >

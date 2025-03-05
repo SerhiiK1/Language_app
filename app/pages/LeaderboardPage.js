@@ -17,7 +17,7 @@ export function callLeaderboard({navigation}){
                     >
                     </Button>
                 </View>
-                <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
+                <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
                     <Button 
                         title= 'Home'
@@ -82,5 +82,12 @@ const styles = StyleSheet.create({
         flex: 1,
         width: null,
         height: null,
+    },
+    bottom_buttons:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        width: '100%',     
+        flex: 1,
     }
 });

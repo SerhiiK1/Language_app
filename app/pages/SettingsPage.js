@@ -17,7 +17,7 @@ export function callSettings({navigation}){
                     >
                     </Button>
                 </View>
-                <View style={{flexDirection: 'row', padding: 10, justifyContent: 'flex-end'}}>
+                <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
                     <Button 
                         title= 'Home'
@@ -55,6 +55,7 @@ export function callSettings({navigation}){
                         </Button>
                     </View> 
                 </View> 
+                {/** needs to be moved later
                 <View style={styles.button}>
                     <Button
                         title= 'AI'
@@ -64,6 +65,7 @@ export function callSettings({navigation}){
                         }}>
                     </Button>
                 </View>
+                */}
             </SafeAreaView>
         </SafeAreaProvider>
     );
@@ -73,6 +75,13 @@ const styles = StyleSheet.create({
     button: {
         width: '25%', 
         height: '10%',
+    },
+    bottom_buttons:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        width: '100%',     
+        flex: 1,
     },
     account_button: {
         backgroundColor: '#415D43',

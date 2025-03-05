@@ -5,7 +5,6 @@ import CreateCardSet from './cards/CreateCardSet';
 import {getItem} from '../utils/AsyncStorage';
 import {getAuth, onAuthStateChanged} from 'firebase/auth';
 import {initializeApp} from 'firebase/app';
-import { doc, setDoc, getDoc, initializeFirestore } from "firebase/firestore";
 import {setExperienceData, fetchUserData} from './functions/Experience'
 
 
@@ -180,10 +179,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'flex-end',
-        width: '100%',
-
-
-        
+        width: '100%',    
         flex: 1,
     },
     app_view: {
