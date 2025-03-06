@@ -42,7 +42,7 @@ export function callSettings({navigation}){
                             }}
                         >
                             <Image
-                                source={require('./Assets/Leaderboard.svg')}
+                                source={require('./Assets/Leaderboard.png')}
                                 style={styles.image}
                             />
                         </TouchableOpacity>

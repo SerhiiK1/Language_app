@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, Button, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import CreateCardSet from './cards/CreateCardSet';
 import {getItem} from '../utils/AsyncStorage';
@@ -25,13 +25,23 @@ const HomeCardSet = ({navigation, name, uid, setCreateCardVisible, setEdit, setE
     return (
         <TouchableOpacity
             onPress={() => {
-                setCreateCardVisible(true)
-                setEdit(false)
-                setEditName(name)
+                navigation.navigate('CardSet', { name, uid });
             }}
             style={styles.card}
         >
-            <Text style={{color: 'white', fontSize: 20}}>{`Name: ${name}`}</Text>
+            <View style={styles.cardContent}>
+                <Text style={{color: 'white', fontSize: 20}}>{`Name: ${name}`}</Text>
+            </View>
+            <TouchableOpacity 
+                style={styles.editButton} 
+                onPress={() => {
+                    setCreateCardVisible(true)
+                    setEdit(false)
+                    setEditName(name)
+                }}
+            >
+                <Text style={{color: 'white'}}>Edit</Text>
+            </TouchableOpacity>
         </TouchableOpacity>
     )
 }
@@ -140,7 +150,7 @@ export function callHome({navigation}){
                             }}
                         >
                             <Image
-                                source={require('./Assets/Leaderboard.svg')}
+                                source={require('./Assets/Leaderboard.png')}
                                 style={styles.image}
                             />
                         </TouchableOpacity>
@@ -177,7 +187,7 @@ export function callHome({navigation}){
                         uid={user ? user.uid : null}
                         edit={edit}
                         setEdit = {setEdit}
-                        editName={editName} // Pass editName as a prop
+                        editName={editName}
                     />
                 </View>
             </SafeAreaView>
@@ -234,12 +244,17 @@ const styles = StyleSheet.create({
     card: {
         width: 200,
         height: 150,
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
         backgroundColor: "#709775",
         borderRadius: 10,
         elevation: 5,
         margin: 10,
+    },
+    cardContent: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
     card_view: {
         justifyContent: 'center',
@@ -259,5 +274,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-    }
+    },
+    editButton: {
+        width: '100%',
+        padding: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#415D43",
+        borderRadius: 10,
+        marginTop: 10,
+    },
 });

@@ -8,17 +8,17 @@ export function callLeaderboard({navigation}){
             <SafeAreaView style={styles.app_view}>
                 <Text style={{color: 'white'}}>Leaderboard</Text> 
                 <View style={styles.account_button}>
-                <TouchableOpacity
-                            style={styles.touchable_button}
-                            onPress={() => {
-                                navigation.navigate('AccountPage');
-                            }}
-                        >
-                            <Image
-                                source={require('./Assets/Profile.png')}
-                                style={styles.image}
-                            />
-                        </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.touchable_button}
+                        onPress={() => {
+                            navigation.navigate('AccountPage');
+                        }}
+                    >
+                        <Image
+                            source={require('./Assets/Profile.png')}
+                            style={styles.image}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
@@ -42,7 +42,7 @@ export function callLeaderboard({navigation}){
                             }}
                         >
                             <Image
-                                source={require('./Assets/Leaderboard.svg')}
+                                source={require('./Assets/Leaderboard.png')}
                                 style={styles.image}
                             />
                         </TouchableOpacity>

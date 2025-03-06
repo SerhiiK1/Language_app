@@ -88,7 +88,7 @@ export function CardSet({navigation, uid, name}) {
         else {
             setBackDisable(false)
         }
-        if (index === card.length - 1) {
+        if (index == card.length - 2) {
             setFrontDisable(true)
         }
         else {
@@ -116,7 +116,7 @@ export function CardSet({navigation, uid, name}) {
     return(
         <SafeAreaProvider>
             <SafeAreaView style = {styles.container}>
-                <TouchableOpacity style = {[styles.card, backDisable && styles.disabledButton]} 
+                <TouchableOpacity style = {[styles.button, backDisable && styles.disabledButton]} 
                     disabled = {backDisable} 
                     onPress={decrement}>
                     <Text>back</Text>
@@ -124,7 +124,7 @@ export function CardSet({navigation, uid, name}) {
                 {card.length > 0 && (
                     <Card front = {card[index].front} back = {card[index].back} />
                 )}
-                <TouchableOpacity style = {[styles.card, frontDisable && styles.disabledButton]} 
+                <TouchableOpacity style = {[styles.button, frontDisable && styles.disabledButton]} 
                     disabled = {frontDisable} 
                     onPress={increment}>
                     <Text>next</Text>
@@ -184,8 +184,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     card: {
-        width: 200,
-        height: 150,
+        width: '40%',
+        height: '25%', 
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#f8c471",
+        borderRadius: 10,
+        elevation: 5,
+        marginVertical: 10,
+    },
+    button: {
+        width: '20%',
+        height: '25%', 
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#f8c471",

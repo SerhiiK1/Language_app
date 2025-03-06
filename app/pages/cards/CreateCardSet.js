@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, ScrollView, Text, TextInput, Modal, Pressable, StyleSheet, Dimensions} from 'react-native'
+import {View, ScrollView, Text, TextInput, Modal, Pressable, StyleSheet, Dimensions, TouchableOpacity} from 'react-native'
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context'
 import {getItem, setItem} from '../../utils/AsyncStorage'
 
@@ -34,12 +34,12 @@ const NewCard = ({ front, back, visible, setVisible, setFront, setBack, edit}) =
                     
 
                 {edit &&
-                    <Pressable style={styles.deleteStyle}
+                    <TouchableOpacity style={styles.deleteStyle}
                     onPress={() => {
                         setDeleteVisible(true);
                     }}>
                     <Text>Delete</Text>
-                </Pressable>}
+                </TouchableOpacity>}
             </View>
             <DeleteCardModal deleteVisible={deleteVisible} setDeleteVisible={setDeleteVisible} setVisible={setVisible}/>
         </View>)
@@ -124,7 +124,7 @@ const CloseCreateCardModal = ({closeVisible, setCloseVisible, setVisible,visible
                                         <Text style={hoveredButton === 'Cancel' 
                                             ? styles.hoveredText : null}>Cancel</Text>
                                 </Pressable>
-                                <Pressable
+                                <TouchableOpacity
                                     onPress={() => {
                                         setCloseVisible(false)
                                         setVisible(!visible)
@@ -138,7 +138,7 @@ const CloseCreateCardModal = ({closeVisible, setCloseVisible, setVisible,visible
                                     style = {styles.modalContentBottom}>
                                         <Text style={hoveredButton === 'Close' 
                                             ? styles.hoveredText : null}>Close</Text>
-                                </Pressable>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -265,7 +265,7 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
                                     {edit && <TextInput placeholder='Name'
                                         style={styles.textInputStyle}
                                         onChangeText={setName}
-                                        value={editName}/>}
+                                        value={name}/>}
                                 </View>
                                 <View style = {styles.modalContent}>
                                     {cardSet.map((card) => {return(
@@ -288,11 +288,10 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
                                     <Text style = {styles.error_message}>{errorMsg}</Text>}
                                 </View>
                                 <View style = {styles.modalButtonBottom}>
-                                    <Pressable 
+                                    <TouchableOpacity 
                                         onPress={() => {
                                             if (edit){
                                                 setCloseVisible(true)
-
                                             }
                                             else {
                                                 setVisible(!visible)
@@ -302,12 +301,10 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
                                                 setErrorMsg('')
                                             }
                                         }}
-                                        onMouseEnter={() => setHoveredButton('close')}
-                                        onMouseLeave={() => setHoveredButton(null)}
                                         style = {styles.modalContentBottom}>
                                             <Text style={hoveredButton === 'close' 
                                                 ? styles.hoveredText : null}>Close</Text>
-                                    </Pressable>
+                                    </TouchableOpacity>
                                     {edit &&
                                         <Pressable 
                                         onPress={() => {addCard()}}
@@ -317,16 +314,14 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
                                             <Text style={hoveredButton === 'add' 
                                                 ? styles.hoveredText : null}>+</Text>
                                         </Pressable>}
-                                    <Pressable 
+                                    <TouchableOpacity 
                                         onPress={() => {
                                             saveCardSet();
                                         }}
-                                        onMouseEnter={() => setHoveredButton('create')}
-                                        onMouseLeave={() => setHoveredButton(null)}
                                         style = {styles.modalContentBottom}>
                                             <Text style={hoveredButton === 'create' 
                                                 ? styles.hoveredText : null}>Create</Text>
-                                    </Pressable>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
