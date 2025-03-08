@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {View, Text, Button, TextInput, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import {signOutUser} from './functions/SignOut';
 
 export function callSettings({navigation}){
+    const [modalVisible, setModalVisible] = React.useState(false);
+    
     return(
         <SafeAreaProvider>
             <SafeAreaView style={styles.app_view}>
@@ -20,6 +23,40 @@ export function callSettings({navigation}){
                         />
                     </TouchableOpacity>
                 </View>
+                <View style = {styles.signOutButton}>
+                    <TouchableOpacity
+                        style = {{justifyContent: 'center', alignItems: 'center'}}
+                        onPress={() => {
+                            setModalVisible(true);
+                        }}
+                        >
+                            <Text style={styles.button_text}>Sign Out</Text>
+                        </TouchableOpacity>
+                </View>
+                {modalVisible && (
+                    <View style={styles.modal}>
+                        <Text style={styles.modalText}>Are you sure you want to sign out?</Text>
+                        <View style={styles.modalButtons}>
+                            <TouchableOpacity
+                                style={styles.modalButton}
+                                onPress={() => {
+                                    setModalVisible(false);
+                                }}
+                            >
+                                <Text style={styles.button_text}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.modalButton}
+                                onPress={() => {
+                                    signOutUser();
+                                    navigation.navigate('SignInPage');
+                                }}
+                            >
+                                <Text style={styles.button_text}>Sign Out</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
                 <View style={styles.bottom_buttons}>
                     <View style = {styles.button}>
                         <TouchableOpacity
@@ -74,17 +111,6 @@ export function callSettings({navigation}){
                         </TouchableOpacity>
                     </View>
                 </View> 
-                {/** needs to be moved later
-                <View style={styles.button}>
-                    <Button
-                        title= 'AI'
-                        color = '#A1CCA5'
-                        onPress={() => {
-                            navigation.navigate('HomePage');
-                        }}>
-                    </Button>
-                </View>
-                */}
             </SafeAreaView>
         </SafeAreaProvider>
     );
@@ -114,6 +140,12 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'black',
     },
+    signOutButton: {
+        backgroundColor: '#A1CCA5',
+        width: '10%',
+        height: '5%',
+        borderRadius: 5,
+    },
     app_view: {
         backgroundColor: '#111D13',
         flex: 1,
@@ -132,5 +164,32 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-    }
+    },
+    modal: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        width: '30%',
+    },
+    modalText: {
+        fontSize: 18,
+        marginBottom: 20,
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    modalButton: {
+        backgroundColor: '#A1CCA5',
+        padding: 10,
+        borderRadius: 5,
+        height: '100%',
+        width: '45%',
+        alignItems: 'center',
+    },
 });
