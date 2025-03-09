@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, ScrollView, Text, TextInput, Modal, Pressable, StyleSheet, Dimensions, TouchableOpacity} from 'react-native'
+import {View,Modal, ScrollView, Text, TextInput, Pressable, StyleSheet, Dimensions, TouchableOpacity} from 'react-native'
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context'
 import {getItem, setItem} from '../../utils/AsyncStorage'
 
@@ -7,7 +7,6 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const NewCard = ({ front, back, visible, setVisible, setFront, setBack, edit}) => {
-
     const [deleteVisible, setDeleteVisible] = useState(false)
 
     return(
@@ -20,19 +19,14 @@ const NewCard = ({ front, back, visible, setVisible, setFront, setBack, edit}) =
                     onChangeText={setFront}
                     value={front}
                     editable = {edit}/>
-                
             </View>
             <View style = {styles.newCardView}>
                 <Text>Back</Text>
-
-
                 <TextInput placeholder='Back' 
                     style={styles.textInputStyle}
                     onChangeText={setBack}
                     value={back}
                     editable = {edit}/>
-                    
-
                 {edit &&
                     <TouchableOpacity style={styles.deleteStyle}
                     onPress={() => {
@@ -56,6 +50,7 @@ const DeleteCardModal = ({ deleteVisible, setDeleteVisible, setVisible}) => {
                     animationType='none'
                     transparent= {true}
                     visible = {deleteVisible}
+                    key={deleteVisible ? "visible" : "hidden"}
                     onRequestClose={() => {
                         setDeleteVisible(!deleteVisible)
                     }}>
@@ -77,8 +72,7 @@ const DeleteCardModal = ({ deleteVisible, setDeleteVisible, setVisible}) => {
                                         onPress={() => {
                                             setDeleteVisible(false)
                                             setVisible(false)
-                                            
-
+                                            console.log('deleted')
                                         }}
                                         onMouseEnter={() => setHoveredButton('Delete')}
                                         onMouseLeave={() => setHoveredButton(null)}
@@ -104,22 +98,22 @@ const CloseCreateCardModal = ({closeVisible, setCloseVisible, setVisible,visible
                 <Modal
                     animationType='none'
                     transparent = {true}
+                    key={closeVisible ? "visible" : "hidden"}
                     visible = {closeVisible}
+                    presentationStyle="overFullScreen"
                     onRequestClose={() => {
                         setCloseVisible(!closeVisible)
                     }}
                 >
-                    <View style={styles.modalContainer}>
+                    <View style={styles.modalOverlay}>
                         <View style={styles.modalView2}>
                             <View style={styles.modalContent}>
-                                <Text style={{fontSize: 20, color: 'red'}}>Are you sure you want close?</Text>
+                                <Text style={{fontSize: 20, color: 'red'}}>Are you sure you want to close?</Text>
                                 <Text style={{fontSize: 10}}>All progress will be lost</Text>
                             </View>
                             <View style = {styles.modalButtonBottom}>
                                 <Pressable 
                                     onPress={() => {setCloseVisible(false)}}
-                                    onMouseEnter={() => setHoveredButton('Cancel')}
-                                    onMouseLeave={() => setHoveredButton(null)}
                                     style = {styles.modalContentBottom}>
                                         <Text style={hoveredButton === 'Cancel' 
                                             ? styles.hoveredText : null}>Cancel</Text>
@@ -133,8 +127,6 @@ const CloseCreateCardModal = ({closeVisible, setCloseVisible, setVisible,visible
                                         setId(0)
                                         setErrorMsg('')
                                     }}
-                                    onMouseEnter={() => setHoveredButton('Close')}
-                                    onMouseLeave={() => setHoveredButton(null)}
                                     style = {styles.modalContentBottom}>
                                         <Text style={hoveredButton === 'Close' 
                                             ? styles.hoveredText : null}>Close</Text>
@@ -147,6 +139,7 @@ const CloseCreateCardModal = ({closeVisible, setCloseVisible, setVisible,visible
         </SafeAreaProvider>
     )
 }
+
 const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, editName}) => {
     const [name, setName] = useState(editName); // Initialize name with editName if provided
     const [cardSet, setCardSet] = useState([])
@@ -174,7 +167,7 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
     }
 
     async function saveCardSet () {
-        let errorMessage = '';
+
         let canSave = true;
         const outCard = {name: name, cards: []};
         if (name === '') {
@@ -185,9 +178,7 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
             cardSet.forEach((card) => {
                 if (card.visible){
                     if (card.front !== '' && card.back !== '') {
-                    
                         outCard.cards.push({front: card.front, back: card.back});
-                    
                     } else {
                         canSave = false;
                         errorMessage = 'Cards must be filled';
@@ -251,6 +242,8 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
                     animationType='none'
                     transparent = {true}
                     visible = {visible}
+                    presentationStyle="overFullScreen"
+                    key={visible ? "visible" : "hidden"}
                     onRequestClose={() => {
                         setVisible(!visible)
                     }}
@@ -261,7 +254,6 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
                                 <View style = {styles.modalTitle}>
                                     {!edit &&
                                     <Text>{`Name: ${editName}`}</Text>}
-                                    
                                     {edit && <TextInput placeholder='Name'
                                         style={styles.textInputStyle}
                                         onChangeText={setName}
@@ -288,7 +280,7 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
                                     <Text style = {styles.error_message}>{errorMsg}</Text>}
                                 </View>
                                 <View style = {styles.modalButtonBottom}>
-                                    <TouchableOpacity 
+                                    <Pressable 
                                         onPress={() => {
                                             if (edit){
                                                 setCloseVisible(true)
@@ -304,7 +296,7 @@ const CreateCardSet = ({navigation, visible, setVisible, uid, edit, setEdit, edi
                                         style = {styles.modalContentBottom}>
                                             <Text style={hoveredButton === 'close' 
                                                 ? styles.hoveredText : null}>Close</Text>
-                                    </TouchableOpacity>
+                                    </Pressable>
                                     {edit &&
                                         <Pressable 
                                         onPress={() => {addCard()}}
@@ -362,6 +354,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        zIndex: 1000,
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 1000,
     },
     modalContent:{
         flex: 1,
@@ -425,7 +425,9 @@ const styles = StyleSheet.create({
         shadowRadius: 800,
         shadowOpacity: 1,
         elevation: 5,
-        borderRadius: 20   
+        borderRadius: 20, 
+        zIndex: 1001,
+        position: "absolute", 
     },
     modalTitle:{
         width: '100%',

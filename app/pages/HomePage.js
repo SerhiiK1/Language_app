@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, Button, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import React, {useRef} from 'react';
+import {View, Text, Button,PanResponder, Animated, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import CreateCardSet from './cards/CreateCardSet';
 import {getItem} from '../utils/AsyncStorage';
@@ -22,27 +22,68 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const HomeCardSet = ({navigation, name, uid, setCreateCardVisible, setEdit, setEditName}) => {
+
+    // Create a ref to store the initial position of the card
+    const initalPosition = useRef(new Animated.ValueXY()).current;
+
+    // Create a ref to store the position of the card
+    const position =
+        useRef(new Animated.ValueXY()).current;
+
+    // State to track if the card is being dragged
+    const [dragging, setDragging] = React.useState(false);
+
+    // Create a pan responder to handle touch events
+    const panResponder = useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderGrant: () => {
+
+                // When touch gesture starts, 
+                //set dragging to true
+                setDragging(true);
+            },
+            onPanResponderMove: Animated.event(
+                [
+                    null,
+                    {
+                        dx: position.x,
+                        dy: position.y,
+                    },
+                ],
+                { useNativeDriver: false }
+            ),
+            onPanResponderRelease: () => {
+                
+                // When touch gesture is released, 
+                //set dragging to false
+                setDragging(false);
+                Animated.spring(position, {
+                    toValue: initalPosition,
+                    useNativeDriver: false,
+                }).start()
+            },
+        })
+    ).current;
+
     return (
-        <TouchableOpacity
+        <Animated.View
             onPress={() => {
                 navigation.navigate('CardSet', { name, uid });
             }}
-            style={styles.card}
+            style={[styles.card,
+                {
+                    transform: position.getTranslateTransform(),
+                    opacity: dragging ? 0.8 : 1,
+                },
+            ]}
+            {...panResponder.panHandlers}
         >
             <View style={styles.cardContent}>
                 <Text style={{color: 'white', fontSize: 20}}>{`Name: ${name}`}</Text>
             </View>
-            <TouchableOpacity 
-                style={styles.editButton} 
-                onPress={() => {
-                    setCreateCardVisible(true)
-                    setEdit(false)
-                    setEditName(name)
-                }}
-            >
-                <Text style={{color: 'white'}}>Edit</Text>
-            </TouchableOpacity>
-        </TouchableOpacity>
+        </Animated.View>
     )
 }
 
@@ -244,6 +285,7 @@ const styles = StyleSheet.create({
     card: {
         width: 200,
         height: 150,
+        userSelect: 'none',
         justifyContent: "space-between",
         alignItems: "center",
         backgroundColor: "#709775",
